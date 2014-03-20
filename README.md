@@ -16,22 +16,22 @@ __Expected Response (Success)__
   type: 'graph', //can take in values of graph or map
   graph: [
     {
-      x: 10.0,
-      y: 10.0,
-      max-y: 14.0,
-      min-y: 4.0
+      r: 10.0,
+      obs: 10.0,
+      lo: 14.0,
+      hi: 4.0
     },
     {
-      x: 12.0,
-      y: 12.0
-      max-y: 17.0,
-      min-y: 7.0
+      r: 12.0,
+      obs: 12.0
+      lo: 17.0,
+      hi: 7.0
     },
     {
-      x: 14.0,
-      y: 14.0
-      max-y: 20.0,
-      min-y: 12.0
+      r: 14.0,
+      obs: 14.0
+      lo: 20.0,
+      hi: 12.0
     }
   ],
   window: //GeoJSON of window layer,
