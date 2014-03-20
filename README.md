@@ -1,6 +1,8 @@
-# RGIS - Making GIS Sexy
+# RGIS - Making R and GIS Sexy
 
-# Expected JSON Output
+An interactive application that aims to make R and GIS sexy for all. 
+
+## Expected JSON Output
 
 __URL Pattern:__ /api/plugin/_:plugin-id_  
 __Request:__ Two zip files. Parameter name of __"window"__ and __"points"__  
