@@ -8,42 +8,8 @@
   </div>
 
   <div class="row">
-    <div class="col-md-8">
-      <form class="form-horizontal" role="form">
-          <!-- Polygon layer input -->
-          <div class="form-group">
-            <label for="" class="control-label col-md-4">Polygon Layer: </label>
-            <div class="col-md-8 input-group">
-              <input type="text" class="form-control">
-              <span class="input-group-btn">
-                <button class="btn btn-default">
-                  <span class="glyphicon glyphicon-search"></span>
-                </button>
-              </span>
-            </div>
-          </div>
-          <!-- End of polygon layer input -->
-
-          <!-- Point layer input -->
-          <div class="form-group">
-            <label for="" class="control-label col-md-4">Point Layer: </label>
-            <div class="col-md-8 input-group">
-              <input type="text" class="form-control">
-              <span class="input-group-btn">
-                <button class="btn btn-default">
-                  <span class="glyphicon glyphicon-search"></span>
-                </button>
-              </span>
-            </div>
-          </div>
-          <!-- End of point layer input -->
-
-          <div class="form-group">
-            <div class="input-group col-md-8 col-md-offset-4">
-              <button class="btn btn-success">Submit</button>
-            </div>
-          </div>
-      </form>
+    <div class="col-md-8" ng-controller="PluginInputCtrl">
+      <button class="btn btn-success" ng-click="openPlugin()">Launch K Function</button>
     </div>
   </div>
 </div>
