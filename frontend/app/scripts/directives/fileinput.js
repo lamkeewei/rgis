@@ -5,6 +5,9 @@ angular.module('rgisApp')
     return {
       templateUrl: 'views/fileInput.html',
       restrict: 'A',
+      scope: {
+        name: '@fileInput'
+      },
       link: function postLink(scope, element, attrs) {
         // Grab the element that is available
         var textInput = angular.element(element.children().children()[0]);

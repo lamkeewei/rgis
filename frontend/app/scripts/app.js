@@ -5,7 +5,9 @@ angular.module('rgisApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'lr.upload',
+  'n3-charts.linechart'
 ])
   .config(function ($routeProvider) {
     $routeProvider

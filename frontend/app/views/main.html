@@ -6,10 +6,21 @@
       </div>
     </div>
   </div>
+  
+  <div ng-controller="PluginInputCtrl">
+    <div class="row">
+      <div class="col-md-2">
+        <button class="btn btn-success" ng-click="openPlugin('kfunction', 'KfunctionCtrl')">Launch K Function</button> 
+      </div>
+    </div>
 
-  <div class="row">
-    <div class="col-md-8" ng-controller="PluginInputCtrl">
-      <button class="btn btn-success" ng-click="openPlugin()">Launch K Function</button>  
+    <div class="row">
+      <div class="col-md-12 plot-area">
+        <div class="page-header">
+          <h2>Results</h2>
+        </div>
+        <linechart data="data" options="options" mode=""></linechart>
+      </div>
     </div>
   </div>
 </div>
