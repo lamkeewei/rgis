@@ -6,13 +6,8 @@
     <!-- Polygon layer input -->
     <div class="form-group">
       <label for="" class="control-label col-md-4">Polygon Layer: </label>
-      <div class="col-md-6 input-group">
-        <input type="text" class="form-control">
-        <span class="input-group-btn">
-          <button class="btn btn-default">
-            <span class="glyphicon glyphicon-search"></span>
-          </button>
-        </span>
+      <div class="col-md-6">
+        <div file-input></div>
       </div>
     </div>
     <!-- End of polygon layer input -->
@@ -20,23 +15,20 @@
     <!-- Point layer input -->
     <div class="form-group">
       <label for="" class="control-label col-md-4">Point Layer: </label>
-      <div class="col-md-6 input-group">
-        <input type="text" class="form-control">
-        <span class="input-group-btn">
-          <button class="btn btn-default">
-            <span class="glyphicon glyphicon-search"></span>
-          </button>
-        </span>
+      <div class="col-md-6">
+        <div file-input></div>
       </div>
     </div>
     <!-- End of point layer input -->
-    
-    <!-- Submit input -->
-    <div class="form-group">
-      <div class="input-group col-md-6 col-md-offset-4">
-        <button class="btn btn-success">Submit</button>
-      </div>
-    </div>
-    <!-- End of submit input -->
   </form>
+
+  <ul>
+    <li ng-repeat="file in files">
+      {{file}}
+    </li>
+  </ul>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success" ng-click="execute()" >Execute</button>
+  <button class="btn btn-default" ng-click="cancel()" >Cancel</button>
 </div>
