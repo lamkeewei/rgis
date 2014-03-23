@@ -15,37 +15,6 @@ angular.module('rgisApp')
             width = elWidth - margin.left - margin.right,
             height = proportion * elWidth - margin.top - margin.bottom;
 
-        var x = d3.scale.linear()
-          .range([0, width]);
-
-        var y = d3.scale.linear()
-          .range([height, 0]);
-
-        var xAxis = d3.svg.axis()
-          .scale(x)
-          .orient('bottom');
-
-        var yAxis = d3.svg.axis()
-          .scale(y)
-          .orient('left');
-
-        var empirical = d3.svg.line()
-          .x(function(d){ return x(d.r); })
-          .y(function(d){ return y(d.obs); });
-
-        var upper = d3.svg.line()
-          .x(function(d){ return x(d.r); })
-          .y(function(d){ return y(d.hi); });
-
-        var lower = d3.svg.line()
-          .x(function(d){ return x(d.r); })
-          .y(function(d){ return y(d.lo); });
-
-        var area = d3.svg.area()
-          .x(function(d){ return x(d.r); })
-          .y0(function(d){ return y(d.lo); })
-          .y1(function(d){ return y(d.hi); });
-
         var svg = d3.select(element[0]).append('svg')
               .attr('width', width + margin.left + margin.right)
               .attr('height', height + margin.top + margin.bottom)
@@ -53,14 +22,49 @@ angular.module('rgisApp')
               .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
         scope.render = function(data){
-          // elWidth = parseFloat(d3.select(element[0]).style('width'));
+          elWidth = parseFloat(d3.select(element[0]).style('width'));
 
-          // width = elWidth - margin.left - margin.right;
-          // height = proportion * elWidth - margin.top - margin.bottom;
+          width = elWidth - margin.left - margin.right;
+          height = proportion * elWidth - margin.top - margin.bottom;
 
-          // d3.select(element[0]).select('svg')
-          //   .attr('width', width + margin.left + margin.right)
-          //   .attr('height', height + margin.top + margin.bottom);
+          var x = d3.scale.linear()
+          .range([0, width]);
+
+          var y = d3.scale.linear()
+            .range([height, 0]);
+
+          var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient('bottom');
+
+          var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient('left');
+
+          var empirical = d3.svg.line()
+            .x(function(d){ return x(d.r); })
+            .y(function(d){ return y(d.obs); });
+
+          var upper = d3.svg.line()
+            .x(function(d){ return x(d.r); })
+            .y(function(d){ return y(d.hi); });
+
+          var lower = d3.svg.line()
+            .x(function(d){ return x(d.r); })
+            .y(function(d){ return y(d.lo); });
+
+          var area = d3.svg.area()
+            .x(function(d){ return x(d.r); })
+            .y0(function(d){ return y(d.lo); })
+            .y1(function(d){ return y(d.hi); });
+
+          d3.select(element[0]).select('svg').remove();
+
+          svg = d3.select(element[0]).append('svg')
+              .attr('width', width + margin.left + margin.right)
+              .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+              .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
           x.domain(d3.extent(data, function(d){ return d.r; }));
           y.domain([d3.min(data, function(d){ return d.hi; }), d3.max(data, function(d){ return d.lo; })]);
@@ -104,6 +108,14 @@ angular.module('rgisApp')
         window.onresize = function() {
           scope.$apply();
         };
+
+        scope.$watch(function() {
+          return angular.element(window)[0].innerWidth;
+        }, function(newVals, oldVals) {
+          if(scope.data){
+            scope.render(scope.data);
+          }
+        });
 
         scope.$watch('data', function(newVals, oldVals) {
           if(newVals){
