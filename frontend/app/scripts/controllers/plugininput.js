@@ -3,9 +3,8 @@
 angular.module('rgisApp')
   .controller('PluginInputCtrl', ['$scope', '$modal', '$log', '$http', '_', 'd3',
     function ($scope, $modal, $log, $http, _, d3) {
-
     $http.get('sample_output.json').then(function(response){
-      $scope.data = response;
+      $scope.data = response.data.graph;
     });
 
     $scope.openPlugin = function(pluginName, controller){

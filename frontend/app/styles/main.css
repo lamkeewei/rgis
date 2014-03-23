@@ -1,3 +1,27 @@
 .plot-area{
   height: 500px;
 }
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.bounds{
+  stroke: grey;
+  stroke-width: 0.5px;
+}
+
+.area {
+    fill: grey;
+    stroke-width: 0;
+    fill-opacity: 0.25;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
