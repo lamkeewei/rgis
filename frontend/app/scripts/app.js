@@ -6,8 +6,7 @@ angular.module('rgisApp', [
   'ngSanitize',
   'ngRoute',
   'ui.bootstrap',
-  'lr.upload',
-  'n3-charts.linechart'
+  'lr.upload'
 ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -18,4 +17,10 @@ angular.module('rgisApp', [
       .otherwise({
         redirectTo: '/'
       });
+  })
+  .factory('_', function(){
+    return window._;
+  })
+  .factory('d3', function(){
+    return window.d3;
   });

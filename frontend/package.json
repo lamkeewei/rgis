@@ -1,7 +1,10 @@
 {
   "name": "rgis",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "karma-jasmine": "~0.1.5",
+    "karma-chrome-launcher": "~0.1.2"
+  },
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-autoprefixer": "~0.4.0",
