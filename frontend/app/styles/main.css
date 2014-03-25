@@ -25,3 +25,12 @@
   stroke: #000;
   shape-rendering: crispEdges;
 }
+
+.cursor {
+  fill: red;
+  fill-opacity: 0.5;
+}
+
+.cursor:hover{
+  cursor: move;
+}

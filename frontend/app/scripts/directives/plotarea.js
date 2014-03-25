@@ -67,7 +67,7 @@ angular.module('rgisApp')
               .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
           x.domain(d3.extent(data, function(d){ return d.r; }));
-          y.domain([d3.min(data, function(d){ return d.hi; }), d3.max(data, function(d){ return d.lo; })]);
+          y.domain(d3.extent(data, function(d){ return d.obs; }));
 
           svg.append('g')
             .attr('class', 'x axis')
@@ -103,6 +103,26 @@ angular.module('rgisApp')
             .datum(data)
             .attr('class', 'line')
             .attr('d', empirical);
+          
+          var drag = d3.behavior.drag()
+            .on('drag', function(){
+              var pos = d3.event.x;
+              vertical.attr('x', pos);
+            })
+            .on('dragend', function(){
+              var pos = d3.select(this).attr('x');
+              scope.currentPos = x.invert(pos);
+              // Log out the current position
+              console.log(scope.currentPos);
+            });
+
+          var vertical = svg.append('rect')
+              .attr('height', height)
+              .attr('width', 2)
+              .attr('class', 'cursor')
+              .attr('x', 3)
+              .attr('y', 0)
+            .call(drag);
         };
 
         window.onresize = function() {
