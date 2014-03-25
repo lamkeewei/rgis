@@ -106,7 +106,10 @@ angular.module('rgisApp')
           
           var drag = d3.behavior.drag()
             .on('drag', function(){
-              var pos = d3.event.x;
+              var range = x.range();
+              var pos = d3.event.x > range[0] ? d3.event.x : range[0];
+              pos = pos > range[1] ? range[1] : pos;
+              
               vertical.attr('x', pos);
             })
             .on('dragend', function(){
