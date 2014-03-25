@@ -5,7 +5,8 @@ angular.module('rgisApp')
     return {
       restrict: 'A',
       scope: {
-        'data': '='
+        'data': '=',
+        'callback': '&'
       },
       link: function postLink(scope, element, attrs) {
         var elWidth = parseFloat(d3.select(element[0]).style('width'));
@@ -114,9 +115,8 @@ angular.module('rgisApp')
             })
             .on('dragend', function(){
               var pos = d3.select(this).attr('x');
-              scope.currentPos = x.invert(pos);
-              // Log out the current position
-              console.log(scope.currentPos);
+              var currentVal = x.invert(pos);
+              scope.callback({ val: currentVal});
             });
 
           var vertical = svg.append('rect')

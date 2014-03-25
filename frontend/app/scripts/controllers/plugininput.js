@@ -7,6 +7,10 @@ angular.module('rgisApp')
       $scope.data = response.data.graph;
     });
 
+    $scope.updateMap = function(val){
+      console.log(val);
+    };
+
     $scope.openPlugin = function(pluginName, controller){
       var modal = $modal.open({
         templateUrl: 'views/' + pluginName + '.html',
