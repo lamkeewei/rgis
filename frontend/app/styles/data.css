@@ -1,0 +1,36 @@
+#upload-btn {
+  display: block;
+}
+
+#datatable{
+  overflow: scroll;
+}
+
+#datatable table{
+  table-layout: fixed;
+}
+
+#datatable tbody td{
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#datatable tbody td div{
+  min-width: 100px;
+}
+
+#datatable-headers {
+  table-layout: fixed;
+  margin: 0px 0px;
+}
+
+#datatable-headers thead th {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: rgb(244,244,244);
+  min-width: 100px;
+}
+
+#datatable-container {
+  font-size: 90%;
+}

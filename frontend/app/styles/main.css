@@ -34,3 +34,12 @@
 .cursor:hover{
   cursor: move;
 }
+
+.full-container{
+  margin-top: 51px;
+  height: 100px;
+}
+
+.full-row{
+  padding: 15px 0px;
+}

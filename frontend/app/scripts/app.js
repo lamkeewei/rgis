@@ -12,7 +12,21 @@ angular.module('rgisApp', [
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        controller: 'MainCtrl',
+        resolve: {
+          dataLoaded: function(Data){
+            return Data.promise;
+          }
+        }
+      })
+      .when('/analyze', {
+        templateUrl: 'views/analyze.html',
+        controller: 'AnalyzeCtrl',
+        resolve: {
+          dataLoaded: function(Data){
+            return Data.promise;
+          }
+        }
       })
       .otherwise({
         redirectTo: '/'
@@ -23,4 +37,6 @@ angular.module('rgisApp', [
   })
   .factory('d3', function(){
     return window.d3;
+  }).factory('L', function(){
+    return window.L;
   });
