@@ -1,3 +1,34 @@
 <div class="full-container">
-  <div map data="data[0]" type="data[0].type" id="map"></div>
+  <div map data="data[0]" type="data[0].type" id="map">
+    <div sidebar id="sidebar">
+        <div class="navigation">
+          <div slide-trigger class="plugin-selector"></div>
+          <div slide-trigger class="plugin-selector"></div>
+          <div slide-trigger class="plugin-selector"></div>
+          <div slide-trigger class="plugin-selector"></div>
+          <div slide-trigger class="plugin-selector"></div>
+        </div>
+        <div class="plugin-input">
+          <h1>K Function</h1>
+          <form role="form">
+            <div class="form-group">
+              <label for="">Select Point Layer:</label>
+              <select class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+              <label for="">Select Window Layer:</label>
+              <select class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+              <button class="btn btn-sm btn-success">Plot Graph</button>
+            </div>
+          </form>
+
+          <div plot-area data="graph"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

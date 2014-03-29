@@ -1,0 +1,48 @@
+#sidebar{
+  position: absolute;
+  top: 20px;
+  right: -435px;
+  z-index: 99;
+  width: 500px;
+  height: auto;
+  background-color: white;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  -o-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+
+#sidebar .navigation {
+  float: left;
+  background-color: rgb(232,232,232);
+}
+
+#sidebar .plugin-input {
+  float: left;
+  width: 435px;
+  padding: 10px 10px;
+}
+
+.plugin-selector {
+  box-sizing: border-box;
+  width: 65px;
+  height: 65px;
+  border-bottom: solid rgb(200,200,200) 1.5px;
+  background-color: rgb(232,232,232);
+}
+
+.plugin-selector:hover {
+  background-color: rgb(242,242,242);
+  cursor: pointer;
+}
+
+.plugin-selector:first-of-type {
+  border-top-left-radius: 5px;
+}
+
+.plugin-selector:last-of-type {
+  border-bottom-left-radius: 5px;
+  border-bottom: none;
+}

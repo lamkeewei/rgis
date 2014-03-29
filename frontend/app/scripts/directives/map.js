@@ -8,11 +8,22 @@ angular.module('rgisApp')
         data: '=',
         type: '='
       },
-      link: function postLink(scope, element, attrs) {
-        console.log(scope.data);
+      controller: function($scope){
         // Initialize map
-        var map = L.mapbox.map('map', 'lamkeewei.h6p10hml');
+        $scope.map = L.mapbox.map('map', 'lamkeewei.h6p10hml');
 
+        this.disableDrag = function(){
+          console.log('drag disabled');
+          $scope.map.dragging.disable();
+        };
+
+        this.enableDrag = function(){
+          $scope.map.dragging.enable();
+        };
+      },
+      link: function postLink(scope, element, attrs) {
+        var map = scope.map;
+        console.log(scope.data);
         // Setup listeners on window for responsive map
         angular.element($window).on('resize', function(){
           resizeMap();

@@ -3,12 +3,13 @@
 angular.module('rgisApp')
   .directive('plotArea', ['d3', function (d3) {
     return {
+      require: '^map',
       restrict: 'A',
       scope: {
         'data': '=',
         'callback': '&'
       },
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope, element, attrs, controller) {
         var elWidth = parseFloat(d3.select(element[0]).style('width'));
         var proportion = 0.7;
 
@@ -106,6 +107,9 @@ angular.module('rgisApp')
             .attr('d', empirical);
           
           var drag = d3.behavior.drag()
+            .on('dragstart', function(){
+              controller.disableDrag();
+            })
             .on('drag', function(){
               var range = x.range();
               var pos = d3.event.x > range[0] ? d3.event.x : range[0];
@@ -114,6 +118,7 @@ angular.module('rgisApp')
               vertical.attr('x', pos);
             })
             .on('dragend', function(){
+              controller.enableDrag();
               var pos = d3.select(this).attr('x');
               var currentVal = x.invert(pos);
               scope.callback({ val: currentVal});
