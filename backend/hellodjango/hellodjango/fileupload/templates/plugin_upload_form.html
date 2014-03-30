@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    {% if plugins %}
+      <ul>
+        {% for plugin in plugins %}
+          <li><a href="{{ plugin.rscript.url }}">{{ plugin.rscript.name }}</a></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No documents.</p>
+    {% endif %}
+
+    <form action="{% url "plugin_upload_form" %}" method="post"
+    enctype="multipart/form-data">
+      {% csrf_token %}
+      <p>{{ form.non_field_errors }}</p>
+      <p>{{ form.upload_file.label_tag }} {{ form.upload_file.help_text }}</p>
+      <p>
+        Name:
+        {{ form.name.errors }}
+        {{ form.name }}
+        Upload file:
+        {{ form.upload_file.errors }}
+        {{ form.upload_file }}
+      </p>
+      <p><input type="submit" value="Upload" /></p>
+    </form>
+
+  </body>
+</html>
+
