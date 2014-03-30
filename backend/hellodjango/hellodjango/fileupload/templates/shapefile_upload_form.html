@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    {% if shapefiles %}
+      <ul>
+        {% for shapefile in shapefiles %}
+          <li><a href="{{ shapefile.zipfile.url }}">{{ shapefile.zipfile.name }}</a></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No shapefiles.</p>
+    {% endif %}
+
+    <form action="{% url 'shapefile_upload' %}" method="post"
+    enctype="multipart/form-data">
+      {% csrf_token %}
+      <p>{{ form.non_field_errors }}</p>
+      <p>{{ form.shapefile.label_tag }}</p>
+      <p>
+        {{ form.shapefile.errors }}
+        {{ form.shapefile }}
+        Name:
+        {{ form.name.errors }}
+        {{ form.name }}
+        Projection:
+        {{ form.projection.errors }}
+        {{ form.projection }}
+      </p>
+      <p><input type="submit" value="Upload" /></p>
+    </form>
+
+  </body>
+</html>
+

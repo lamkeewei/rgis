@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <body>
+
+    <form action="{% url "kde_function" %}" method="post"
+    enctype="multipart/form-data">
+      {% csrf_token %}
+      <p>{{ form.non_field_errors }}</p>
+      <p>
+        Namespace:
+        {{ form.namespace.errors }}
+        {{ form.namespace }}
+        Point:
+        {{ form.point.errors }}
+        {{ form.point }}
+        Window:
+        {{ form.window.errors }}
+        {{ form.window }}
+        Bandwidth:
+        {{ form.bandwidth.errors }}
+        {{ form.bandwidth }}
+      </p>
+      <p><input type="submit" value="Go" /></p>
+    </form>
+
+  </body>
+</html>
+
