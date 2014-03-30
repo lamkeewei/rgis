@@ -8,7 +8,7 @@ angular.module('rgisApp')
         data: '=',
         type: '='
       },
-      controller: function($scope){
+      controller: ['$scope', function($scope){
         // Initialize map
         $scope.map = L.mapbox.map('map', 'lamkeewei.h6p10hml');
 
@@ -20,7 +20,7 @@ angular.module('rgisApp')
         this.enableDrag = function(){
           $scope.map.dragging.enable();
         };
-      },
+      }],
       link: function postLink(scope, element, attrs) {
         var map = scope.map;
         // Setup listeners on window for responsive map

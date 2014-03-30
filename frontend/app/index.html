@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/data.css">
     <link rel="stylesheet" href="styles/analyze.css">
-    <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css' rel='stylesheet' />
+    <link rel="stylesheet" href="bower_components/mapboxjs/mapbox.css" />
     <!-- endbuild -->
   </head>
   <body ng-app="rgisApp">
@@ -73,11 +73,11 @@
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/moment/moment.js"></script>
     <script src="bower_components/ng-grid/build/ng-grid.min.js"></script>
+    <script src="bower_components/mapboxjs/mapbox.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js'></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/pluginInput.js"></script>
