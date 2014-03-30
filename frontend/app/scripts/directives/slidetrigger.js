@@ -8,7 +8,6 @@ angular.module('rgisApp')
         element.bind('click', function(e){
           var container = angular.element(element.parent()[0].parentNode);
           var rightPos = parseInt(container.css('right'));
-          console.log(rightPos <= 0);
           if(rightPos >= 0) {
             container.css('right', '-435px');
           }else{

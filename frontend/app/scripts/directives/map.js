@@ -23,7 +23,6 @@ angular.module('rgisApp')
       },
       link: function postLink(scope, element, attrs) {
         var map = scope.map;
-        console.log(scope.data);
         // Setup listeners on window for responsive map
         angular.element($window).on('resize', function(){
           resizeMap();
