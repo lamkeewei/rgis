@@ -14,18 +14,18 @@ angular.module('rgisApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
         resolve: {
-          dataLoaded: function(Data){
+          dataLoaded: ['Data', function(Data){
             return Data.promise;
-          }
+          }]
         }
       })
       .when('/analyze', {
         templateUrl: 'views/analyze.html',
         controller: 'AnalyzeCtrl',
         resolve: {
-          dataLoaded: function(Data){
+          dataLoaded: ['Data', function(Data){
             return Data.promise;
-          }
+          }]
         }
       })
       .otherwise({

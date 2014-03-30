@@ -41,6 +41,7 @@
   border-bottom: solid rgb(200,200,200) 1.5px;
   background-color: rgb(232,232,232);
   color: rgb(117,117,117);
+  font-size: 9pt;
 }
 
 .plugin-selector .icon {
