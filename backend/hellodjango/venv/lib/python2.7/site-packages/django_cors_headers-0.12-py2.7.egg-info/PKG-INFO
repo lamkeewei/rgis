@@ -1,0 +1,20 @@
+Metadata-Version: 1.1
+Name: django-cors-headers
+Version: 0.12
+Summary: django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS).
+Home-page: https://github.com/ottoyiu/django-cors-headers
+Author: Otto Yiu
+Author-email: otto@live.ca
+License: MIT License
+Description: UNKNOWN
+Keywords: django cors middleware rest api
+Platform: any
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules

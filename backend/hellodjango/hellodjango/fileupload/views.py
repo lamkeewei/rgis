@@ -209,7 +209,7 @@ def kfunction_initialize(request):
             print time.time() - start
             print "function starting\n"
 
-            resultsJson = conn.r.func0(window_filename, point_filename)
+            resultsJson = conn.r.func0(window_filename+"projected", point_filename+"projected")
             print time.time() - start
             print "results retrieved\n"
             # format the graph output (currently its 4 list of y values. need X lists of y1, y2, y3, y4 values)
