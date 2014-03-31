@@ -87,7 +87,7 @@ DATABASES = {
     }
 }
 
-MEDIA_ROOT = '~/Projects/rgis/backend/ hellodjango/hellodjango/uploads/'
+MEDIA_ROOT = '/Users/lamkeewei/Projects/rgis/backend/hellodjango/hellodjango/uploads/'
 MEDIA_URL = '/uploads/'
 
 # set max size to 10 MB

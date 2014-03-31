@@ -20,6 +20,7 @@
           </div>
         </div>
         <div class="plugin-input">
+        <!--
           <h1>K Function</h1>
           <form role="form">
             <div class="form-group">
@@ -42,7 +43,36 @@
           </form>
 
           <div plot-area data="graph"></div>
-        </div>
+        -->
+        <h1>Geographically Weighted Regression</h1>
+        <form role="form">
+          <div class="form-group">
+            <label for="">Select Dependent Variable:</label>
+            <select class="form-control">
+              <option ng-repeat="(key, value) in data" value="{{$index}}">{{value.name}}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="">Select Dependent Variable:</label>
+            <select multiple class="form-control">
+              <option>Population</option>
+              <option>Bus Stops</option>
+              <option>Clinics</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+              <button class="btn btn-sm btn-success">Execute</button>
+            </div>
+        </form>
+
+        <h2>Select Chloropleth Variable</h2>
+        <div class="form-group">
+            <select class="form-control">
+              <option>Preschools</option>
+            </select>
+          </div>
       </div>
     </div>
   </div>
