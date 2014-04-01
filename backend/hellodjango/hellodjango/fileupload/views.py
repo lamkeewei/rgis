@@ -22,6 +22,7 @@ import commands
 import requests
 import urllib
 import shutil
+import math
 
 # Create your views here.
 def plugin_upload_form(request):
@@ -200,7 +201,7 @@ def kfunction_initialize(request):
             print "got the jsons\n"
 
             # load the function
-            functionFile = open('/Users/admin/hellodjango/hellodjango/fileupload/lfunction.r')
+            functionFile = open(settings.BASE_DIR + '/fileupload/lfunction.r')
             functionContent = functionFile.read()
 
             conn.voidEval(functionContent)
@@ -277,18 +278,15 @@ def kde_function(request):
             print window_filename
 
             # load the function
-            functionFile = open('/Users/admin/hellodjango/hellodjango/fileupload/kdefunction.r')
+            functionFile = open(settings.BASE_DIR + '/fileupload/kdefunction.r')
             functionContent = functionFile.read()
 
             conn.voidEval(functionContent)
 
             resultsJson = conn.r.KDE_function(window_filename, point_filename, bandwidth)
 
-
-            # format the graph output (currently its 4 list of y values. need X lists of y1, y2, y3, y4 values)
-            resultsJson = json.loads(resultsJson)
-            print json.dumps(resultsJson, indent=2)
-            intensity = resultsJson['matrix']
+            # print json.dumps(resultsJson, indent=2)
+            intensity = resultsJson['kde_matrix']
             yrow = resultsJson['yrow']
             xcol = resultsJson['xcol']
 
@@ -297,8 +295,7 @@ def kde_function(request):
             try:
                 for i in range(0, len(intensity)):
                     for j in range(0, len(intensity[0])):
-                        print intensity[i]
-                        if intensity[i][j]:
+                        if not math.isnan(float(intensity[i][j])):
                             lat = yrow[j]
                             lng = xcol[i]
                             intensity1 = intensity[i][j]
