@@ -31,8 +31,8 @@ KDE_function <-function (windowLayer, pointLayer, bandwidth) {
 
   #Compute KDE
   kde_nm_bandwidth <- density(nm_ppp,bandwidth)
-  matrix<-as.matrix.im(kde_nm_bandwidth)
+  kde_matrix<-as.matrix.im(kde_nm_bandwidth)
 
-  return(toJSON(list(yrow=kde_nm_bandwidth$yrow,xcol=kde_nm_bandwidth$xcol,matrix=matrix)))
+  return((list(yrow=kde_nm_bandwidth$yrow,xcol=kde_nm_bandwidth$xcol,kde_matrix=kde_matrix)))
 
 }
