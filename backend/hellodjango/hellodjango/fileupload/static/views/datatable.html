@@ -1,0 +1,1 @@
+<div id="datatable-container"><table id="datatable-headers" class="table table-bordered"><thead><th ng-repeat="(key, value) in data[0]"><div>{{key}}</div></table><div id="datatable"><table class="table table-bordered table-striped table-hover"><tbody><tr ng-repeat="(key, row) in data | filter:search"><td ng-repeat="d in row"><div>{{d}}</div></table></div></div>

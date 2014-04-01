@@ -87,7 +87,7 @@ DATABASES = {
     }
 }
 
-MEDIA_ROOT = '/Users/lamkeewei/Projects/rgis/backend/hellodjango/hellodjango/uploads/'
+MEDIA_ROOT = BASE_DIR + '/uploads/'
 MEDIA_URL = '/uploads/'
 
 # set max size to 10 MB
@@ -127,8 +127,9 @@ ALLOWED_HOSTS = ['*']
 import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = 'staticfiles'
-STATIC_URL = '/static/'
+STATIC_URL = '/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
+    "../../frontend/app",
 )
