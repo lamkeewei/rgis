@@ -107,9 +107,6 @@ angular.module('rgisApp')
             .attr('d', empirical);
           
           var drag = d3.behavior.drag()
-            .on('dragstart', function(){
-              controller.disableDrag();
-            })
             .on('drag', function(){
               var range = x.range();
               var pos = d3.event.x > range[0] ? d3.event.x : range[0];
@@ -118,7 +115,6 @@ angular.module('rgisApp')
               vertical.attr('x', pos);
             })
             .on('dragend', function(){
-              controller.enableDrag();
               var pos = d3.select(this).attr('x');
               var currentVal = x.invert(pos);
               scope.callback({ val: currentVal});
