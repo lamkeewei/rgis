@@ -9,9 +9,9 @@ angular.module('rgisApp')
     $scope.config = [];
 
     // SAMPLE GRAPH
-    $http.get('sample_output.json').then(function(res){
-      $scope.graph = res.data.graph;
-    });
+    // $http.get('sample_output.json').then(function(res){
+    //   $scope.graph = res.data.graph;
+    // });
     $scope.initKFunction = function(){
       var data = {
         window: $scope.window,
@@ -21,6 +21,31 @@ angular.module('rgisApp')
       console.log(data);
       $http.post('/fileupload/api/plugin/kfunction/initialize/', data).then(function(res){
         $scope.graph = res.data.graph;
+      });
+    };
+
+    $scope.calcKDE = function(val){
+      var data = {
+        window: $scope.window,
+        point: $scope.point,
+        bandwidth: val
+      };
+
+      $http.post('/fileupload/api/plugin/kfunction/kde/', data).then(function(res){
+        var geojson = res.data;
+        $scope.mapLayers = [geojson];
+
+        var colors = $scope.getColorScale(geojson, 'level', colorbrewer.GnBu[8]);
+        $scope.config = [{
+          style: function(feature){
+            return {
+              weight: 10,
+              opacity: 1,
+              color: colors(feature.properties.level),
+              fillOpacity: 0.8
+            };
+          }
+        }];
       });
     };
 
@@ -34,7 +59,6 @@ angular.module('rgisApp')
           .range(colors);
 
       var getColor = function(d){
-        console.log(color(d));
         return color(d);
       };
 
@@ -47,16 +71,16 @@ angular.module('rgisApp')
     // var colorTwo = $scope.getColorScale($scope.geojson[1], 'PNTCNT', colorbrewer.PuBu[4]);
 
     // $scope.config = [
-    //   {
-    //     style: function(feature){
-    //       return {
-    //         weight: 10,
-    //         opacity: 1,
-    //         color: colorOne(feature.properties.level),
-    //         fillOpacity: 0.8
-    //       };
-    //     }
-    //   },
+      // {
+      //   style: function(feature){
+      //     return {
+      //       weight: 10,
+      //       opacity: 1,
+      //       color: colorOne(feature.properties.level),
+      //       fillOpacity: 0.8
+      //     };
+      //   }
+      // },
     //   {
     //     style: function(feature){
     //       return {

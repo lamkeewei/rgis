@@ -2,77 +2,80 @@
   <div map data="mapLayers" config="config" id="map">
     <div sidebar id="sidebar">
         <div class="navigation">
-          <div tooltip-placement="left" tooltip="Map Settings" slide-trigger class="plugin-selector">
+          <div tooltip-placement="left" tooltip="Map Settings" slide-trigger="1" class="plugin-selector">
             <span class="icon glyphicon glyphicon-cog"></span><br/>
             MAP
           </div>
-          <div tooltip-placement="left" tooltip="Kernel Density Estimation" slide-trigger class="plugin-selector">
+          <div tooltip-placement="left" tooltip="Kernel Density Estimation" slide-trigger="2" class="plugin-selector">
             <span class="icon glyphicon glyphicon-fire"></span><br/>
             KDE
           </div>
-          <div tooltip-placement="left" tooltip="Linear Correlation" slide-trigger class="plugin-selector">
+          <div tooltip-placement="left" tooltip="Linear Correlation" slide-trigger="3" class="plugin-selector">
             <span class="icon glyphicon glyphicon-signal"></span><br/>
             LINEAR
           </div>
-          <div tooltip-placement="left" tooltip="Add Plugins" slide-trigger class="plugin-selector">
+          <div tooltip-placement="left" tooltip="Add Plugins" slide-trigger="4" class="plugin-selector">
             <span class="icon glyphicon glyphicon-plus"></span><br/>
             ADD
           </div>
         </div>
         <div class="plugin-input">
-          <h1>K Function</h1>
-          <form role="form">
+          <div id="kfunction">
+            <h1>K Function</h1>
+            <form role="form">
+              <div class="form-group">
+                <label for="">Select Point Layer:</label>
+                <select ng-model="point" class="form-control">
+                  <option ng-repeat="(key, value) in data">{{value.name}}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="">Select Window Layer:</label>
+                <select ng-model="window" class="form-control">
+                  <option ng-repeat="(key, value) in data">{{value.name}}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <button class="btn btn-sm btn-success" ng-click="initKFunction()">Plot Graph</button>
+              </div>
+            </form>
+
+            <div id="plot" plot-area data="graph" callback="calcKDE(val)"></div>
+          </div>
+          
+          <div id="gwr"> 
+            <h1>Geographically Weighted Regression</h1>
+            <form role="form">
+              <div class="form-group">
+                <label for="">Select Dependent Variable:</label>
+                <select class="form-control">
+                  <option ng-repeat="(key, value) in data" value="{{$index}}">{{value.name}}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="">Select Dependent Variable:</label>
+                <select multiple class="form-control">
+                  <option>Population</option>
+                  <option>Bus Stops</option>
+                  <option>Clinics</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <button class="btn btn-sm btn-success">Execute</button>
+              </div>
+            </form>
+
+            <h2>Select Chloropleth Variable</h2>
             <div class="form-group">
-              <label for="">Select Point Layer:</label>
-              <select ng-model="point" class="form-control">
-                <option ng-repeat="(key, value) in data">{{value.name}}</option>
+              <select class="form-control">
+                <option>Preschools</option>
               </select>
             </div>
-
-            <div class="form-group">
-              <label for="">Select Window Layer:</label>
-              <select ng-model="window" class="form-control">
-                <option ng-repeat="(key, value) in data">{{value.name}}</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <button class="btn btn-sm btn-success" ng-click="initKFunction()">Plot Graph</button>
-            </div>
-          </form>
-
-          <div id="plot" plot-area data="graph"></div>
-        <!--
-        <h1>Geographically Weighted Regression</h1>
-        <form role="form">
-          <div class="form-group">
-            <label for="">Select Dependent Variable:</label>
-            <select class="form-control">
-              <option ng-repeat="(key, value) in data" value="{{$index}}">{{value.name}}</option>
-            </select>
           </div>
-
-          <div class="form-group">
-            <label for="">Select Dependent Variable:</label>
-            <select multiple class="form-control">
-              <option>Population</option>
-              <option>Bus Stops</option>
-              <option>Clinics</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-              <button class="btn btn-sm btn-success">Execute</button>
-            </div>
-        </form>
-
-        <h2>Select Chloropleth Variable</h2>
-        <div class="form-group">
-            <select class="form-control">
-              <option>Preschools</option>
-            </select>
-          </div>
-        -->
       </div>
     </div>
   </div>

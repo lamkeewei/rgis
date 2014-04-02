@@ -117,7 +117,7 @@ angular.module('rgisApp')
             .on('dragend', function(){
               var pos = d3.select(this).attr('x');
               var currentVal = x.invert(pos);
-              scope.callback({ val: currentVal});
+              scope.callback({val: currentVal});
             });
 
           var vertical = svg.append('rect')

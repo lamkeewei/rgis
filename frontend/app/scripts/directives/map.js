@@ -12,6 +12,7 @@ angular.module('rgisApp')
       controller: ['$scope', '$http', function($scope){
         // Initialize map
         $scope.map = L.mapbox.map('map', 'lamkeewei.h6p10hml');
+        // $scope.map.setView([1.321651, 103.932106], 10);
 
         this.disableDrag = function(){
           console.log('drag disabled');
@@ -35,11 +36,31 @@ angular.module('rgisApp')
         };
 
         resizeMap();
+        var layerGrp = new L.LayerGroup();
 
-        scope.data.forEach(function(d, i){
-          var style = scope.config[i].style;
-          L.geoJson(d, {style: style}).addTo(map);
-        });
+        var loadLayers = function(){
+          scope.data.forEach(function(d, i){
+            var layer;
+
+            if(scope.config[i]){
+              var style = scope.config[i].style;
+              layer = L.geoJson(d, {style: style});
+            } else {
+              layer = L.geoJson(d);
+            }
+
+            layerGrp.addLayer(layer);
+          });
+          layerGrp.addTo(map);
+        };
+
+        loadLayers();
+
+        scope.$watch('data', function(newVal, oldVal){
+          console.log('map layers changed');
+          layerGrp.clearLayers();
+          loadLayers();
+        }, true);
       }
     };
   });
