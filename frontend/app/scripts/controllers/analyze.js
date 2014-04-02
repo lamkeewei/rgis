@@ -12,6 +12,13 @@ angular.module('rgisApp')
     // $http.get('sample_output.json').then(function(res){
     //   $scope.graph = res.data.graph;
     // });
+    if(Data.getGraph().data){
+      var d = Data.getGraph();
+      $scope.window = d.window;
+      $scope.point = d.point;
+      $scope.graph = d.data;
+    }
+    
     $scope.initKFunction = function(){
       var data = {
         window: $scope.window,
@@ -20,6 +27,13 @@ angular.module('rgisApp')
 
       console.log(data);
       $http.post('/fileupload/api/plugin/kfunction/initialize/', data).then(function(res){
+        // Cache the graph
+        Data.storeGraph({
+          window: $scope.window,
+          point: $scope.point,
+          data: res.data.graph
+        });
+
         $scope.graph = res.data.graph;
       });
     };

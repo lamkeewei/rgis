@@ -3,6 +3,7 @@
 angular.module('rgisApp')
   .factory('Data', function ($http, $q, _) {
     // Initialize data
+    var graph = {};
     var data = {};
     data.dataLayer = [];
     data.geoJsonLayer = [];
@@ -30,6 +31,12 @@ angular.module('rgisApp')
         data.geoJsonLayer.push(obj.data);
 
         return data;
+      },
+      storeGraph: function(g){
+        graph = g;
+      },
+      getGraph: function(){
+        return graph;
       }
     };
   });
