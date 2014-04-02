@@ -12,10 +12,10 @@ angular.module('rgisApp')
       }
     });
 
-    $scope.openPlugin = function(pluginName, controller){
+    $scope.openPlugin = function(){
       var modal = $modal.open({
-        templateUrl: 'views/' + pluginName + '.html',
-        controller: controller,
+        templateUrl: 'views/fileupload.html',
+        controller: 'UploadCtrl',
         keyboard: true
       });
 

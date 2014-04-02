@@ -6,7 +6,7 @@ angular.module('rgisApp', [
   'ngSanitize',
   'ngRoute',
   'ui.bootstrap',
-  'lr.upload'
+  'angularFileUpload'
 ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -37,6 +37,12 @@ angular.module('rgisApp', [
   })
   .factory('d3', function(){
     return window.d3;
-  }).factory('L', function(){
+  })
+  .factory('L', function(){
     return window.L;
-  });
+  })
+  .config(['$httpProvider', function($httpProvider) {
+      $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+      $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    }
+  ]);
