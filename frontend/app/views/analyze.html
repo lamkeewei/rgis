@@ -1,7 +1,11 @@
 <div class="full-container">
-  <div map data="geojson[2]" type="geojson[2].type" id="map">
+  <div map data="geojson[0]" type="geojson[0].type" id="map">
     <div sidebar id="sidebar">
         <div class="navigation">
+          <div tooltip-placement="left" tooltip="Map Settings" slide-trigger class="plugin-selector">
+            <span class="icon glyphicon glyphicon-cog"></span><br/>
+            MAP
+          </div>
           <div tooltip-placement="left" tooltip="Kernel Density Estimation" slide-trigger class="plugin-selector">
             <span class="icon glyphicon glyphicon-fire"></span><br/>
             KDE
@@ -9,10 +13,6 @@
           <div tooltip-placement="left" tooltip="Linear Correlation" slide-trigger class="plugin-selector">
             <span class="icon glyphicon glyphicon-signal"></span><br/>
             LINEAR
-          </div>
-          <div tooltip-placement="left" tooltip="Map Style" slide-trigger class="plugin-selector">
-            <span class="icon glyphicon glyphicon-tint"></span><br/>
-            STYLE
           </div>
           <div tooltip-placement="left" tooltip="Add Plugins" slide-trigger class="plugin-selector">
             <span class="icon glyphicon glyphicon-plus"></span><br/>

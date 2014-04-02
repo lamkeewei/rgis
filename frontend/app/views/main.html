@@ -2,7 +2,7 @@
   <div class="full-row clearfix">
     <div class="col-md-2">
       <label class="control-label">Select Table: </label>
-      <select ng-model="selectDataName" class="form-control" ng-selected="selectDataName">
+      <select ng-model="selectDataName" class="form-control">
         <option ng-repeat="(key, value) in data" value="{{$index}}">{{value.name}}</option>
       </select>
     </div>
@@ -25,6 +25,9 @@
 
   <div class="full-row">
     <div class="col-md-12">
+      <div class="text-center" ng-show="data.length < 1">
+        <h3>No data available</h3>
+      </div>
       <div datatable="selectedData" search="search"></div> 
     </div>
   </div>
