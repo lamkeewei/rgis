@@ -76,13 +76,13 @@ def shapefile_upload(request):
     # handle file upload
     if request.method == "POST":
 
-        if 'shapefile' not in request.FILES:
+        if 'file' not in request.FILES:
             return(json.dumps({"status":"error", "message":"shapefile not specified"}))
 
         if 'name' not in request.POST:
             return(json.dumps({"status":"error", "message":"name not specified"}))
 
-        window_zip_file = Shapefile(zipfile = request.FILES['shapefile'], name=request.POST['name'])
+        window_zip_file = Shapefile(zipfile = request.FILES['file'], name=request.POST['name'])
         window_zip_file.save()
 
         # now unzip the file
