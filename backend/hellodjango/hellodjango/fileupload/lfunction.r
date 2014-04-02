@@ -22,7 +22,7 @@ func0 <- function(window_file, points_file){
     # set the observation window
     nm_ppp <- nm_ppp[window_owin]
 
-    E <- envelope(nm_ppp, Lest, nsim = 95)
+    E <- envelope(nm_ppp, Lest, nsim = 30)
     # plot(E, main="L-function")
 
     jsonoutput = toJSON(list(r=E$r, obs=E$obs, lo=E$lo, hi=E$hi), pretty=FALSE, collapse="")
