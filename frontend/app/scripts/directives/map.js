@@ -35,6 +35,9 @@ angular.module('rgisApp')
 
         resizeMap();
 
+        console.log(scope.data);
+        L.geoJson(scope.data).addTo(map);
+
         // Add GeoJSON
         // $http.get('Bedok_Population.geojson').then(function(res){
         //   var data = res.data.features;

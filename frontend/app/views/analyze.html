@@ -1,5 +1,5 @@
 <div class="full-container">
-  <div map data="geojson[0]" type="geojson[0].type" id="map">
+  <div map data="geojson[2]" type="geojson[2].type" id="map">
     <div sidebar id="sidebar">
         <div class="navigation">
           <div tooltip-placement="left" tooltip="Kernel Density Estimation" slide-trigger class="plugin-selector">
@@ -20,7 +20,6 @@
           </div>
         </div>
         <div class="plugin-input">
-        <!--
           <h1>K Function</h1>
           <form role="form">
             <div class="form-group">
@@ -42,8 +41,8 @@
             </div>
           </form>
 
-          <div plot-area data="graph"></div>
-        -->
+          <div id="plot" plot-area data="graph"></div>
+        <!--
         <h1>Geographically Weighted Regression</h1>
         <form role="form">
           <div class="form-group">
@@ -73,6 +72,7 @@
               <option>Preschools</option>
             </select>
           </div>
+        -->
       </div>
     </div>
   </div>
