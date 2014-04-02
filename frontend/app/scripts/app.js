@@ -41,6 +41,9 @@ angular.module('rgisApp', [
   .factory('L', function(){
     return window.L;
   })
+  .factory('colorbrewer', function(){
+    return window.colorbrewer;
+  })
   .config(['$httpProvider', function($httpProvider) {
       $httpProvider.defaults.xsrfCookieName = 'csrftoken';
       $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';

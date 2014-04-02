@@ -1,5 +1,5 @@
 <div class="full-container">
-  <div map data="geojson[0]" type="geojson[0].type" id="map">
+  <div map data="mapLayers" config="config" id="map">
     <div sidebar id="sidebar">
         <div class="navigation">
           <div tooltip-placement="left" tooltip="Map Settings" slide-trigger class="plugin-selector">
@@ -24,20 +24,20 @@
           <form role="form">
             <div class="form-group">
               <label for="">Select Point Layer:</label>
-              <select class="form-control">
-                <option ng-repeat="(key, value) in data" value="{{$index}}">{{value.name}}</option>
+              <select ng-model="point" class="form-control">
+                <option ng-repeat="(key, value) in data">{{value.name}}</option>
               </select>
             </div>
 
             <div class="form-group">
               <label for="">Select Window Layer:</label>
-              <select class="form-control">
-                <option ng-repeat="(key, value) in data" value="{{$index}}">{{value.name}}</option>
+              <select ng-model="window" class="form-control">
+                <option ng-repeat="(key, value) in data">{{value.name}}</option>
               </select>
             </div>
 
             <div class="form-group">
-              <button class="btn btn-sm btn-success">Plot Graph</button>
+              <button class="btn btn-sm btn-success" ng-click="initKFunction()">Plot Graph</button>
             </div>
           </form>
 
