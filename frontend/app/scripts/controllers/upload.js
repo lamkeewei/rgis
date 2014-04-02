@@ -6,6 +6,7 @@ angular.module('rgisApp')
     $scope.upload.crs = 'EPSG:4326';
     var uploader = $scope.uploader = $fileUploader.create({
       scope: $scope,
+      alias: 'shapefile',
       url: '/fileupload/api/upload/',
       formData: [
         {
