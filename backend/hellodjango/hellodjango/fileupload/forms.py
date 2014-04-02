@@ -25,3 +25,6 @@ class KfunctionKDEInitializeForm(forms.Form):
     point = forms.CharField(max_length=150)
     window = forms.CharField(max_length=150)
     bandwidth = forms.CharField(max_length=15)
+
+class GWRInitializeForm(forms.Form):
+    namespace = forms.CharField(max_length=150, required=False)

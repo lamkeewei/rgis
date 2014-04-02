@@ -2,6 +2,7 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, Template
 from django.core.urlresolvers import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from hellodjango import settings
 
@@ -33,12 +34,15 @@ def get_csrftoken(request):
     return response
 
 # Create your views here.
+#@csrf_exempt
 def plugin_upload_form(request):
 
     # handle file upload
     if request.method == "POST":
 
-        newPlugin = Plugin(rscript = request.FILES['upload_file'], name=request.POST['name'])
+        data = json.loads(request.body)
+
+        newPlugin = Plugin(rscript = request.FILES['upload_file'], name=data['name'])
         newPlugin.save()
 
         # read the uploaded file to get the function name
@@ -72,6 +76,7 @@ def plugin_upload_form(request):
         context_instance=RequestContext(request)
     )
 
+#@csrf_exempt
 def shapefile_upload(request):
 
     # handle file upload
@@ -101,7 +106,7 @@ def shapefile_upload(request):
         window_zip_file.save()
 
         # try to get the input epsg code
-        if 'projection' not in request.POST or (request.POST['projection'] == "" or request.POST['projection'] == None):
+        if 'projection' not in request.POST or request.POST['projection'] == "undefined" or (request.POST['projection'] == "" or request.POST['projection'] == None):
             filename = window_zip_file.get_full_path() + ".prj"
             try:
                 prjFile = open(filename)
@@ -170,14 +175,18 @@ def shapefile_upload(request):
         context_instance=RequestContext(request)
     )
 
+@csrf_exempt
 def kfunction_initialize(request):
     start = time.time()
     print time.time() - start
     print "started\n"
+
     if request.method == "POST":
 
-        point_filename = request.POST['point']
-        window_filename = request.POST['window']
+        data = json.loads(request.body)
+
+        point_filename = data['point']
+        window_filename = data['window']
 
         # get the relevant files
         point_object = Shapefile.objects.get(name=point_filename)
@@ -254,13 +263,16 @@ def kfunction_initialize(request):
             context_instance=RequestContext(request)
         )
 
+@csrf_exempt
 def kde_function(request):
 
     if request.method == "POST":
 
-        point_filename = request.POST['point']
-        window_filename = request.POST['window']
-        bandwidth = float(request.POST['bandwidth'])
+        data = json.loads(request.body)
+
+        point_filename = data['point']
+        window_filename = data['window']
+        bandwidth = float(data['bandwidth'])
 
         # get the relevant files
         point_object = Shapefile.objects.get(name=point_filename)
@@ -321,6 +333,23 @@ def kde_function(request):
 
         return render_to_response(
             'kfunction_kde.html',
+            {'form': form},
+            context_instance=RequestContext(request)
+        )
+
+def gwr_initialize(request):
+
+    if request.method == "POST":
+
+
+
+        return HttpResponse("e")
+
+    else:
+        form = GWRInitializeForm() # an empty, unbound form
+
+        return render_to_response(
+            'gwr_initialize_form.html',
             {'form': form},
             context_instance=RequestContext(request)
         )

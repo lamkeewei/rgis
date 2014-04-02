@@ -12,5 +12,6 @@ urlpatterns = patterns('',
     # /api/plugin/kfunction/initialize
     url(r'^api/plugin/kfunction/initialize/$', views.kfunction_initialize, name='kfunction_initialize'),
     url(r'^api/plugin/kfunction/kde/$', views.kde_function, name='kde_function'),
+    url(r'^api/plugin/correlation/initialize/$', views.gwr_initialize, name='gwr_initialize'),
     url(r'^api/get_csrftoken/$', views.get_csrftoken, name='get_csrftoken'),
 )
