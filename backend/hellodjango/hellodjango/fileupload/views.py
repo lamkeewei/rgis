@@ -76,7 +76,7 @@ def plugin_upload_form(request):
         context_instance=RequestContext(request)
     )
 
-#@csrf_exempt
+@csrf_exempt
 def shapefile_upload(request):
 
     # handle file upload
@@ -105,8 +105,10 @@ def shapefile_upload(request):
         window_zip_file.filename = realfilename
         window_zip_file.save()
 
+
         # try to get the input epsg code
         if 'projection' not in request.POST or request.POST['projection'] == "undefined" or (request.POST['projection'] == "" or request.POST['projection'] == None):
+
             filename = window_zip_file.get_full_path() + ".prj"
             try:
                 prjFile = open(filename)
@@ -115,22 +117,23 @@ def shapefile_upload(request):
 
                 prjFile.close()
 
+                prjString = ""
+
+                for line in prjContents:
+                    prjString = prjString + line
+
+                f = {'terms': prjString}
+                prjString = urllib.urlencode(f)
+
+                # now put it as a query string to get the epsg code
+                epsg_r = requests.get("http://prj2epsg.org/search.json?mode=wkt&" + prjString)
+                epsg_r = epsg_r.json()['codes']
+
+                epsgCode = "EPSG:" + epsg_r[0]['code']
+
             except IOError:
-                return(json.dumps({"status":"error", "message":"projection not known"}))
-
-            prjString = ""
-
-            for line in prjContents:
-                prjString = prjString + line
-
-            f = {'terms': prjString}
-            prjString = urllib.urlencode(f)
-
-            # now put it as a query string to get the epsg code
-            epsg_r = requests.get("http://prj2epsg.org/search.json?mode=wkt&" + prjString)
-            epsg_r = epsg_r.json()['codes']
-
-            epsgCode = "EPSG:" + epsg_r[0]['code']
+                # default to wgs84
+                epsgCode = "EPSG:4326"
 
         else:
             epsgCode = request.POST['projection'] # user specified a projection
@@ -313,11 +316,8 @@ def kde_function(request):
             message = "error running kde function in r"
             return HttpResponse(json.dumps({"status":"error", "message":message}), content_type="application/json")
 
-        response = {}
-        response['status'] = 'success'
-        response['namespace'] = outputgeojson
 
-        response = json.dumps(response, indent=2)
+        response = json.dumps(outputgeojson, indent=2)
 
         finalresponse = HttpResponse(response, content_type="application/json")
 
@@ -337,11 +337,37 @@ def kde_function(request):
             context_instance=RequestContext(request)
         )
 
+@csrf_exempt
 def gwr_initialize(request):
 
     if request.method == "POST":
 
+        data = json.loads(request.body)
 
+        shapefile_filename = data['namespace']
+
+        shapefile_object = Shapefile.objects.get(name=shapefile_filename)
+
+        conn = pyRserve.connect()
+
+        # get the path to shapefile
+        shapefile_filename = shapefile_object.get_full_path() + "projected"
+
+        # load the function
+        functionFile = open(settings.BASE_DIR + '/fileupload/getSHPHeader.r')
+        functionContent = functionFile.read()
+        print functionContent
+        conn.voidEval(functionContent)
+        print functionContent
+
+        try:
+            # get the list of columns in this shapefile
+            nameslist = conn.r.getSHPHeader(shapefile_filename)
+            print nameslist
+
+        except:
+            message = "error running function in r"
+            return HttpResponse(json.dumps({"status":"error", "message":message}), content_type="application/json")
 
         return HttpResponse("e")
 
