@@ -24,6 +24,13 @@ import urllib
 import shutil
 import math
 
+def get_csrftoken(request):
+    # This bit of code adds the CSRF bits to your request.
+    c = RequestContext(request)
+    t = Template("{% csrf_token %}") # A dummy template
+    response = HttpResponse(t.render(c), content_type = 'application/json')
+    return response
+
 # Create your views here.
 def plugin_upload_form(request):
 
@@ -87,7 +94,7 @@ def shapefile_upload(request):
         window_zip_file.save()
 
         # try to get the input epsg code
-        if request.POST['projection'] == "" or request.POST['projection'] == None:
+        if 'projection' not in request.POST or (request.POST['projection'] == "" or request.POST['projection'] == None):
             filename = window_zip_file.get_full_path() + ".prj"
             try:
                 prjFile = open(filename)
