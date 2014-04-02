@@ -354,22 +354,27 @@ def gwr_initialize(request):
         shapefile_filename = shapefile_object.get_full_path() + "projected"
 
         # load the function
-        functionFile = open(settings.BASE_DIR + '/fileupload/getSHPHeader.r')
+        functionFile = open(settings.BASE_DIR + '/fileupload/new.r')
         functionContent = functionFile.read()
         print functionContent
+
         conn.voidEval(functionContent)
-        print functionContent
 
         try:
             # get the list of columns in this shapefile
-            nameslist = conn.r.getSHPHeader(shapefile_filename)
-            print nameslist
+            nameslist = conn.r.getshpheader(shapefile_filename)
+
+            nameslist = list(nameslist)
 
         except:
             message = "error running function in r"
             return HttpResponse(json.dumps({"status":"error", "message":message}), content_type="application/json")
 
-        return HttpResponse("e")
+        response_obj = {}
+        response_obj['status'] = "success"
+        response_obj['variables'] = nameslist
+
+        return HttpResponse(json.dumps(response_obj), content_type="application/json")
 
     else:
         form = GWRInitializeForm() # an empty, unbound form

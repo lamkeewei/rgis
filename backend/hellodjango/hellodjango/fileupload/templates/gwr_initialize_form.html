@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <body>
+
+    <form action="{% url "gwr_initialize" %}" method="post"
+    enctype="multipart/form-data">
+      {% csrf_token %}
+      <p>{{ form.non_field_errors }}</p>
+      <p>
+        Shapefile:
+        {{ form.namespace.errors }}
+        {{ form.namespace }}
+
+      </p>
+      <p><input type="submit" value="Go" /></p>
+    </form>
+
+  </body>
+</html>
