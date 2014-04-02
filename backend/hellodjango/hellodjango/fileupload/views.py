@@ -23,6 +23,7 @@ import requests
 import urllib
 import shutil
 import math
+import uuid
 
 def get_csrftoken(request):
     # This bit of code adds the CSRF bits to your request.
@@ -76,13 +77,13 @@ def shapefile_upload(request):
     # handle file upload
     if request.method == "POST":
 
-        if 'file' not in request.FILES:
+        if 'shapefile' not in request.FILES:
             return(json.dumps({"status":"error", "message":"shapefile not specified"}))
 
         if 'name' not in request.POST:
             return(json.dumps({"status":"error", "message":"name not specified"}))
 
-        window_zip_file = Shapefile(zipfile = request.FILES['file'], name=request.POST['name'])
+        window_zip_file = Shapefile(zipfile = request.FILES['shapefile'], name=request.POST['name'])
         window_zip_file.save()
 
         # now unzip the file
@@ -145,14 +146,14 @@ def shapefile_upload(request):
         # This bit of code adds the CSRF bits to your request.
         c = RequestContext(request,{"result":outputgeojson})
         t = Template("{% autoescape off %}{{result}}{% endautoescape %}") # A dummy template
-        response = HttpResponse(t.render(c), content_type = 'application/json')
+        output_response = HttpResponse(t.render(c), content_type = 'application/json')
 
-        response["Access-Control-Allow-Origin"] = "*"
-        response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
-        response["Access-Control-Max-Age"] = "1000"
-        response["Access-Control-Allow-Headers"] = "*"
+        output_response["Access-Control-Allow-Origin"] = "*"
+        output_response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+        output_response["Access-Control-Max-Age"] = "1000"
+        output_response["Access-Control-Allow-Headers"] = "*"
 
-        return(response)
+        return(output_response)
         # Redirect to the document list after POST
         #return HttpResponseRedirect(reverse('shapefile_upload'))
 
@@ -270,7 +271,7 @@ def kde_function(request):
         # read the shapefile
         window_filename = window_object.get_full_path() + "projected"
         point_filename = point_object.get_full_path() + "projected"
-        print window_filename
+        # print window_filename
 
         # load the function
         functionFile = open(settings.BASE_DIR + '/fileupload/kdefunction.r')
@@ -279,23 +280,22 @@ def kde_function(request):
 
         conn.voidEval(functionContent)
 
-        resultsJson = conn.r.KDE_function(window_filename, point_filename, bandwidth)
-
-        # print json.dumps(resultsJson, indent=2)
-        intensity = resultsJson['kde_matrix']
-        yrow = resultsJson['yrow']
-        xcol = resultsJson['xcol']
-
-        newResultsJson = []
+        output_path = settings.BASE_DIR + '/kdeoutputs/'
+        output_name = str(uuid.uuid4()).replace("-", "")
 
         try:
-            for i in range(0, len(intensity)):
-                for j in range(0, len(intensity[0])):
-                    if not math.isnan(float(intensity[i][j])):
-                        lat = yrow[j]
-                        lng = xcol[i]
-                        intensity1 = intensity[i][j]
-                        newResultsJson.append([lat, lng, intensity1])
+            # note that KDE function only returns the status
+            # it creates the shapefile of contour lines
+            resultsJson = conn.r.KDE_function(window_filename, point_filename, bandwidth, output_path, output_name)
+
+            # convert to geojson
+            source_filename = pipes.quote(output_path + output_name + ".shp")
+            output_filename = pipes.quote(output_path + output_name + ".geojson")
+            print commands.getoutput("ogr2ogr -f GeoJSON -s_srs EPSG:4326 -t_srs EPSG:4326 " + output_filename + " " + source_filename)
+
+            # output the geojson
+            with open (output_path + output_name + ".geojson", "rb") as geojsonfile:
+                outputgeojson = json.loads(geojsonfile.read().replace('\n', ''))
 
         except:
             message = "error running kde function in r"
@@ -303,7 +303,7 @@ def kde_function(request):
 
         response = {}
         response['status'] = 'success'
-        response['namespace'] = newResultsJson
+        response['namespace'] = outputgeojson
 
         response = json.dumps(response, indent=2)
 
