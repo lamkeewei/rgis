@@ -19,8 +19,8 @@ angular.module('rgisApp')
         keyboard: true
       });
 
-      modal.result.then(function(status){
-        $log.info('Reply received!');
+      modal.result.then(function(data){
+        $scope.data = Data.addData(data).dataLayer;
       });
     };
   });

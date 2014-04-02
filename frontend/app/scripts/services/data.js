@@ -42,6 +42,22 @@ angular.module('rgisApp')
       promise: promise,
       getData: function () {
         return data;
+      },
+      addData: function(obj) {
+        var features = obj.data.features;
+        var properties = _.map(features, function(d){
+          return d.properties;
+        });
+
+        data.dataLayer.push({
+          name: obj.name,
+          type: 'point',
+          data: properties
+        });
+
+        data.geoJsonLayer.push(obj.data);
+
+        return data;
       }
     };
   });

@@ -1,25 +1,28 @@
 <div class="modal-header">
-  <h3>File Upload {{test}}</h3>
+  <h3>File Upload</h3>
 </div>
 <div class="modal-body">
   <form class="form-horizontal" role="form">
-    <!-- Polygon layer input -->
+    <div class="form-group">
+      <label for="" class="control-label col-md-4">Layer Name: </label>
+      <div class="col-md-6">
+        <input type="text" ng-model="upload.name" placeholder="Name of layer" class="form-control" />
+      </div>
+    </div>
+
     <div class="form-group">
       <label for="" class="control-label col-md-4">CRS: </label>
       <div class="col-md-6">
         <input type="text" ng-model="upload.crs" placeholder="Eg. EPSG:4326" class="form-control" />
       </div>
     </div>
-    <!-- End of polygon layer input -->
-
-    <!-- Point layer input -->
+    
     <div class="form-group">
       <label for="" class="control-label col-md-4">Point Layer: </label>
       <div class="col-md-6">
         <input ng-file-select type="file" name="shapefile" />
       </div>
     </div>
-    <!-- End of point layer input -->
   </form>
 </div>
 <div class="modal-footer">
