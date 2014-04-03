@@ -5,13 +5,15 @@
   <img src="images/logo.png" id="logo"/>
   <form class="form-horizontal" role="form">
     <div class="form-group">
-      <div class="col-md-6 col-md-offset-3">
+      <div class="col-md-8 col-md-offset-2 input-group">
         <input type="text" ng-model="name" placeholder="Enter a unique name to get started" class="form-control" />
+        <span class="input-group-btn">
+          <button class="btn btn-success" ng-click="$close(name)" >Let's Go!</button>
+        </span>
       </div>
     </div>
 </div>
 
 <div class="modal-footer">
-  <button class="btn btn-success" ng-click="$close(name)" >Let's Go!</button>
-  <button class="btn btn-default" ng-click="$dismiss()" >Cancel</button>
+
 </div>

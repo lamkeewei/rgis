@@ -50,4 +50,8 @@ angular.module('rgisApp')
         $scope.selectDataName = $scope.data.length - 1;
       });
     };
+
+    $scope.isSelected = function(index){
+      return $scope.selectDataName === index;
+    };
   });

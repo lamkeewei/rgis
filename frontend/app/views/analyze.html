@@ -2,19 +2,19 @@
   <div map data="mapLayers" config="config" flag="flag" id="map">
     <div sidebar id="sidebar">
         <div class="navigation">
-          <div tooltip-placement="left" tooltip="Visualize the data" panel="settings" slide-trigger="1" class="plugin-selector">
+          <div panel="settings" slide-trigger="1" class="plugin-selector">
             <span class="icon glyphicon glyphicon-eye-open"></span><br/>
-            MAP
+            Layers
           </div>
-          <div tooltip-placement="left" tooltip="Color settings" panel="style" slide-trigger="2" class="plugin-selector">
+          <div panel="style" slide-trigger="2" class="plugin-selector">
             <span class="icon glyphicon glyphicon-tint"></span><br/>
             STYLE
           </div>
-          <div tooltip-placement="left" tooltip="Kernel density estimation" panel="kfunction" slide-trigger="2" class="plugin-selector">
+          <div panel="kde" slide-trigger="2" class="plugin-selector">
             <span class="icon glyphicon glyphicon-fire"></span><br/>
             KDE
           </div>
-          <div tooltip-placement="left" tooltip="Geographically weighted regression" panel="gwr" slide-trigger="3" class="plugin-selector">
+          <div panel="gwr" slide-trigger="3" class="plugin-selector">
             <span class="icon glyphicon glyphicon-signal"></span><br/>
             GWR
           </div>
@@ -89,7 +89,7 @@
             </div>
           </div>
 
-          <div class="panel" id="kfunction">
+          <div class="panel" id="kde">
             <h1>Kernel Density Estimation</h1>
             <form role="form">
               <div class="form-group">

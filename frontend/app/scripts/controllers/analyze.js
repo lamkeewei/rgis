@@ -7,7 +7,7 @@ angular.module('rgisApp')
     if(!$scope.uniqueName){
       $location.path('/');
     }
-
+    $scope.active = 'settings';
     $scope.geojson = Data.getData().geoJsonLayer;
     $scope.data = Data.getData().dataLayer;
     $scope.flag = {change: true};

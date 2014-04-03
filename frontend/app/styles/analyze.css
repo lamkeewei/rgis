@@ -4,8 +4,8 @@
 
 #sidebar{
   position: absolute;
-  top: 50px;
-  right: 0px;
+  top: 10%;
+  right: -435px;
   z-index: 99;
   width: 500px;
   height: 600px;
