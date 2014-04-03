@@ -6,8 +6,12 @@ func0 <- function(shapefile) {
   # read shapefile into r as spatial data frame
   input_shp <- readShapeSpatial(shapefile)
 
-  # returns only the headers
-  return(list(names(input_shp)))
+
+  # returns only the headers of numeric columns
+  mydata = input_shp@data
+  nums <- sapply(mydata, is.numeric)
+
+  return(list(names(mydata[ , nums])))
 
 }
 

@@ -6,7 +6,10 @@ getshpheader <- function(shapefile) {
   # read shapefile into r as spatial data frame
   input_shp <- readShapeSpatial(shapefile)
 
-  # returns only the headers
-  return(names(input_shp))
+  # returns only the headers of numeric columns
+  mydata = input_shp@data
+  nums <- sapply(mydata, is.numeric)
+
+  return(names(mydata[ , nums]))
 
 }
