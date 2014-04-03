@@ -3,6 +3,8 @@
 angular.module('rgisApp')
   .controller('UploadCtrl', function ($scope, $modalInstance, $fileUploader, $cookies) {
     $scope.upload = {};
+    $scope.uploading = false;
+
     var createUploader = function(){
       var uploader = $fileUploader.create({
         scope: $scope,
@@ -16,10 +18,12 @@ angular.module('rgisApp')
         ],
         headers: {
           'X-CSRFToken': $cookies.csrftoken
-        }
+        },
+        method: 'POST'
       });
       
       uploader.bind('success', function (event, xhr, item, response) {
+        $scope.uploading = false;
         $modalInstance.close({
           name: $scope.upload.name,
           data: response
@@ -36,6 +40,7 @@ angular.module('rgisApp')
     }, true);
 
     $scope.execute = function(){
+      $scope.uploading = true;
       $scope.uploader.uploadAll();
     };
 

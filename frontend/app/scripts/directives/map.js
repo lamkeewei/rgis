@@ -57,17 +57,27 @@ angular.module('rgisApp')
           layerGrp.addTo(map);
         };
 
+        var setViewArea = function(){
+          if(scope.data.length > 0){
+            var layers = layerGrp.getLayers();
+            var bounds = layers[layers.length - 1].getBounds();
+            map.fitBounds(bounds);
+          }
+        };
+
         loadLayers();
 
         scope.$watch('data', function(newVal, oldVal){
           layerGrp.clearLayers();
           loadLayers();
+          setViewArea();
         }, true);
 
         scope.$watch('config', function(newVal, oldVal){
           console.log('changed config');
           layerGrp.clearLayers();
           loadLayers();
+          setViewArea();
         }, true);
 
         scope.$watch('flag', function(newVal, oldVal){
