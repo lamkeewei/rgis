@@ -4,14 +4,14 @@ gwr_function <- function (inputFilePath, gwrFormula, gwrDirectoryPath, outputFil
   library(spdep)
   library(spgwr)
   library(rgdal)
-  library(car)
+  # library(car)
 
   # Read in spatial shapefile
   inputFile <- readShapeSpatial(inputFilePath, CRS("+proj=longlat +datum=WGS84"))
   # print("inputFile")
-  significance = summary(lm(eval(parse(text=gwrFormula)), data = inputFile))
+  # significance = summary(lm(eval(parse(text=gwrFormula)), data = inputFile))
 
-  variance_inflation_factors = as.matrix(vif(lm(eval(parse(text=gwrFormula)), data = inputFile)))
+  # variance_inflation_factors = as.matrix(vif(lm(eval(parse(text=gwrFormula)), data = inputFile)))
 
   # Calculate the optimal bandwidth
   bw <- gwr.sel(eval(parse(text=gwrFormula)), data = inputFile, adapt=T)
@@ -20,7 +20,7 @@ gwr_function <- function (inputFilePath, gwrFormula, gwrDirectoryPath, outputFil
   gwr.model <- gwr(eval(parse(text=gwrFormula)), data = inputFile, adapt=bw)
 
   # gwr_coefficients_estimates = gwr.model
-  print("gwr_coefficients_estimates")
+  # print("gwr_coefficients_estimates")
   # Extract SpatialDataFrame from gwr.model
   gwr_sdf <- gwr.model$SDF
 
