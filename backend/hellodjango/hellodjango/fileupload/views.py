@@ -356,7 +356,6 @@ def gwr_initialize(request):
         # load the function
         functionFile = open(settings.BASE_DIR + '/fileupload/new.r')
         functionContent = functionFile.read()
-        print functionContent
 
         conn.voidEval(functionContent)
 
@@ -400,7 +399,7 @@ def gwr_plot(request):
         shapefile_object = Shapefile.objects.get(name=shapefile_filename)
 
         # get the path to shapefile
-        shapefile_filename = shapefile_object.get_full_path() + "projected"
+        shapefile_file = shapefile_object.get_full_path() + "projected"
 
         # based on the dependent and independent variables, prepare the formula
         prepared_formula = dependent + " ~ "
@@ -417,35 +416,32 @@ def gwr_plot(request):
         # prepare the r function
         functionFile = open(settings.BASE_DIR + '/fileupload/plotGWR.r')
         functionContent = functionFile.read()
-        print functionContent
 
         conn.voidEval(functionContent)
 
         # set the file path for the output shapefile
         output_path = settings.BASE_DIR + '/gwroutputs/'
-        output_name = shapefile_filename + str(uuid.uuid4()).replace("-", "")[10]
+        output_name = shapefile_filename + str(uuid.uuid4()).replace("-", "")[:10]
 
         try:
             # get the statistics of this particular input
             # this function will also create a shapefile
-            function_output = conn.r.plotGWR(shapefile_filename, prepared_formula, output_path, output_name)
+            function_output = conn.r.gwr_function(shapefile_file, prepared_formula, output_path, output_name)
 
         except:
             message = "error running function in r"
             return HttpResponse(json.dumps({"status":"error", "message":message}), content_type="application/json")
 
-        # # convert to geojson
-        # source_filename = pipes.quote(output_path + output_name + ".shp")
-        # output_filename = pipes.quote(output_path + output_name + ".geojson")
-        # print commands.getoutput("ogr2ogr -f GeoJSON -s_srs EPSG:4326 -t_srs EPSG:4326 " + output_filename + " " + source_filename)
+        # convert to geojson
+        source_filename = pipes.quote(output_path + output_name + ".shp")
+        output_filename = pipes.quote(output_path + output_name + ".geojson")
+        print commands.getoutput("ogr2ogr -f GeoJSON -s_srs EPSG:4326 -t_srs EPSG:4326 " + output_filename + " " + source_filename)
 
-        # # output the geojson
-        # with open (output_path + output_name + ".geojson", "rb") as geojsonfile:
-        #     outputgeojson = json.loads(geojsonfile.read().replace('\n', ''))
+        # output the geojson
+        with open (output_path + output_name + ".geojson", "rb") as geojsonfile:
+            outputgeojson = json.loads(geojsonfile.read().replace('\n', ''))
 
-        # return HttpResponse(json.dumps(outputgeojson), content_type="application/json")
-
-        return HttpResponse(function_output)
+        return HttpResponse(json.dumps(outputgeojson), content_type="application/json")
 
     else:
         return HttpResponse("coming soon")
