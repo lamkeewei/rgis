@@ -7,7 +7,7 @@ angular.module('rgisApp')
     var data = {};
     data.dataLayer = [];
     data.geoJsonLayer = [];
-
+    var uniqueName = '';
     var promise = $http.get('/fileupload/api/get_csrftoken/');
 
     // Public API here
@@ -37,6 +37,12 @@ angular.module('rgisApp')
       },
       getGraph: function(){
         return graph;
+      },
+      getUniqueName: function(){
+        return uniqueName;
+      },
+      setUniqueName: function(name){
+        uniqueName = name;
       }
     };
   });

@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <h3 class="text-center">Welcome to RGIS</h3>
+</div>
+<div class="modal-body">
+  <img src="images/logo.png" id="logo"/>
+  <form class="form-horizontal" role="form">
+    <div class="form-group">
+      <div class="col-md-6 col-md-offset-3">
+        <input type="text" ng-model="name" placeholder="Enter a unique name to get started" class="form-control" />
+      </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-success" ng-click="$close(name)" >Let's Go!</button>
+  <button class="btn btn-default" ng-click="$dismiss()" >Cancel</button>
+</div>

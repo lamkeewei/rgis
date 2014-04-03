@@ -2,6 +2,28 @@
 
 angular.module('rgisApp')
   .controller('DataCtrl', function ($scope, $http, _, $modal, $log, Data) {
+    $scope.uniqueName = Data.getUniqueName();
+    $scope.init = function(){
+      var modal = $modal.open({
+        templateUrl: 'views/signin.html',
+        backdrop: 'static',
+        keyboard: false
+      });
+
+      modal.result.then(function(name){
+        if(!name){
+          console.log('empty');
+          $scope.init();
+        }
+
+        Data.setUniqueName(name);
+      });
+    };
+
+    if(!$scope.uniqueName){
+      $scope.init();
+    }
+
     $scope.data = Data.getData().dataLayer;
     $scope.selectDataName = 0;
     if($scope.data.length > 0){

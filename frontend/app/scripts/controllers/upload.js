@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('rgisApp')
-  .controller('UploadCtrl', function ($scope, $modalInstance, $fileUploader, $cookies) {
+  .controller('UploadCtrl', function ($scope, $modalInstance, $fileUploader, $cookies, Data) {
     $scope.upload = {};
     $scope.uploading = false;
-
+    $scope.uniqueName = Data.getUniqueName();
+    
     var createUploader = function(){
       var uploader = $fileUploader.create({
         scope: $scope,
@@ -13,7 +14,7 @@ angular.module('rgisApp')
         formData: [
           {
             projection: $scope.upload.crs,
-            name: $scope.upload.name
+            name: $scope.uniqueName + '_' + $scope.upload.name
           }
         ],
         headers: {
@@ -25,7 +26,7 @@ angular.module('rgisApp')
       uploader.bind('success', function (event, xhr, item, response) {
         $scope.uploading = false;
         $modalInstance.close({
-          name: $scope.upload.name,
+          name: $scope.uniqueName + '_' + $scope.upload.name,
           data: response
         });
       });

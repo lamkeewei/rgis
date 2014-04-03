@@ -3,7 +3,7 @@
     <div class="col-md-2">
       <label class="control-label">Select Table: </label>
       <select ng-model="selectDataName" class="form-control">
-        <option ng-repeat="(key, value) in data" value="{{$index}}">{{value.name}}</option>
+        <option ng-repeat="(key, value) in data" value="{{$index}}">{{value.name | stripUnique}}</option>
       </select>
     </div>
 

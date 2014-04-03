@@ -1,3 +1,11 @@
+#logo {
+  width: 300px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 30px;
+}
+
 #upload-btn {
   display: block;
 }

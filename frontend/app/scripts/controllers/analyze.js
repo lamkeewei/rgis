@@ -1,7 +1,13 @@
 'use strict';
 
 angular.module('rgisApp')
-  .controller('AnalyzeCtrl', function ($scope, Data, $http, d3, _, colorbrewer) {
+  .controller('AnalyzeCtrl', function ($scope, Data, $http, d3, _, colorbrewer, $location) {
+    $scope.uniqueName = Data.getUniqueName();
+
+    if(!$scope.uniqueName){
+      $location.path('/');
+    }
+
     $scope.geojson = Data.getData().geoJsonLayer;
     $scope.data = Data.getData().dataLayer;
     $scope.flag = {change: true};
