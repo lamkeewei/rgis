@@ -32,16 +32,16 @@ KDE_function <-function (windowLayer, pointLayer, bandwidth, outputfolder, shpfi
     setwd(outputFolder)
     dem <- readGDAL(rasterPath)
     im <- as.image.SpatialGridDataFrame(dem)
-    cl <- contourLines(im,20)
+    cl <- contourLines(im , nlevels=20)
     SLDF <- ContourLines2SLDF(cl,proj4string=CRS(as.character("+proj=longlat +ellps=WGS84 +datum=WGS84")))
     writeOGR(SLDF, ".", layerName, driver="ESRI Shapefile")
 
     # Remove comments if you want it to be plotted on R
-    #mc <- readOGR(".", layerName)
-    #summary(dem)
-    #summary(mc)
-    #image(dem, col=gray.colors(20))
-    #plot(mc, col=terrain.colors(8), add=TRUE)
+    # mc <- readOGR(".", layerName)
+    # summary(dem)
+    # summary(mc)
+    # image(dem, col=gray.colors(20))
+    # plot(mc, col=terrain.colors(8), add=TRUE)
   }
 
   # let y be window layer
@@ -74,7 +74,3 @@ KDE_function <-function (windowLayer, pointLayer, bandwidth, outputfolder, shpfi
   raster2ContourSHP(tempFilePath, shpfilename, outputfolder)
 
 }
-
-# Usage
-# KDE_function("C:/Users/andreng/Desktop/WGS84/BedokOnly.shp", "C:/Users/andreng/Desktop/WGS84/schInBedok.shp", 0.01, "C:/Users/andreng/Desktop/WGS84/" ,"testSHP")
-

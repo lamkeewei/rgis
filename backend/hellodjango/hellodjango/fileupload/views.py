@@ -298,6 +298,9 @@ def kde_function(request):
         output_path = settings.BASE_DIR + '/kdeoutputs/'
         output_name = str(uuid.uuid4()).replace("-", "")
 
+        print output_path
+        print output_name
+
         try:
             # note that KDE function only returns the status
             # it creates the shapefile of contour lines
@@ -427,6 +430,13 @@ def gwr_plot(request):
             # get the statistics of this particular input
             # this function will also create a shapefile
             function_output = conn.r.gwr_function(shapefile_file, prepared_formula, output_path, output_name)
+            # print 'variables'
+            # print list(function_output['variables'])
+            # print 'significance'
+            # print function_output['significance']
+            # print 'variance_inflation_factors'
+            # print function_output['variance_inflation_factors']
+            variables = list(function_output)
 
         except:
             message = "error running function in r"
@@ -441,7 +451,12 @@ def gwr_plot(request):
         with open (output_path + output_name + ".geojson", "rb") as geojsonfile:
             outputgeojson = json.loads(geojsonfile.read().replace('\n', ''))
 
-        return HttpResponse(json.dumps(outputgeojson), content_type="application/json")
+        # prepare response
+        response = {}
+        response['variables'] = variables
+        response['outputgeojson'] = outputgeojson
+
+        return HttpResponse(json.dumps(response), content_type="application/json")
 
     else:
         return HttpResponse("coming soon")
