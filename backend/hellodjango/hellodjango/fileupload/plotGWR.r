@@ -29,8 +29,10 @@ gwr_function <- function (inputFilePath, gwrFormula, gwrDirectoryPath, outputFil
 
   writeOGR(gwr_sdf, ".", outputFilename, driver="ESRI Shapefile")
 
-  # get the output variable names
-  variables = names(gwr_sdf)
+  mydata = gwr_sdf@data
+  nums <- sapply(mydata, is.numeric)
+
+  variables = names(mydata[ , nums])
 
   return(variables)
 
