@@ -34,3 +34,7 @@
 #datatable-container {
   font-size: 90%;
 }
+
+#textarea-independent {
+  overflow: auto;
+}

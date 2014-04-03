@@ -11,7 +11,7 @@ angular.module('rgisApp')
 
         var pluginInput = angular.element(element.children()[1]);
         console.log(pluginInput.children());
-        var hide = angular.element(pluginInput.children()[1]);
+        var hide = angular.element(pluginInput.children()[0]);
         hide.css('display', 'none');
 
         L.DomEvent.disableClickPropagation(element[0]);

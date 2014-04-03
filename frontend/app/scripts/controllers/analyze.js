@@ -4,7 +4,7 @@ angular.module('rgisApp')
   .controller('AnalyzeCtrl', function ($scope, Data, $http, d3, _, colorbrewer) {
     $scope.geojson = Data.getData().geoJsonLayer;
     $scope.data = Data.getData().dataLayer;
-
+    $scope.flag = {change: true};
     $scope.mapLayers = [];
     $scope.config = [];
 
@@ -67,16 +67,68 @@ angular.module('rgisApp')
       var reduce = _.map(data.features, function(d){
         return parseFloat(d.properties[valName]);
       });
-
+      console.log(reduce);
       var color = d3.scale.quantize()
           .domain(d3.extent(reduce))
           .range(colors);
 
       var getColor = function(d){
+        console.log(d);
         return color(d);
       };
 
       return getColor;
+    };
+
+    $scope.$watch('regressionLayer', function(newVal, oldVal){
+      if(newVal >= 0){
+        var namespace = $scope.data[newVal].name;
+
+        $http.post('/fileupload/api/plugin/correlation/initialize/', {namespace: namespace}).then(function(res){
+          $scope.variables = res.data.variables;
+        });
+      }
+    });
+
+    $scope.gwrIndex = 0;
+
+    $scope.initGWR = function(){
+      var n = $scope.regressionLayer;
+
+      var namespace = $scope.data[n].name;
+      var data = {
+        namespace: namespace,
+        dependent: $scope.dependentVariable,
+        independent: $scope.independentVariable
+      };
+
+      $http.post('/fileupload/api/plugin/correlation/plot/', data).then(function(res){
+        var data = res.data;
+        var gjson = data.outputgeojson;
+        console.log(gjson);
+        $scope.mapLayers = [gjson];
+        $scope.gwrIndex = $scope.mapLayers.length - 1;
+        $scope.chloroVars = data.variables;
+      });
+    };
+
+    $scope.setChloro = function(){
+      console.log($scope.mapLayers);
+      var colorTwo = $scope.getColorScale($scope.mapLayers[$scope.gwrIndex], $scope.chloroVal, colorbrewer.PuBu[6]);
+      
+      $scope.config = [{
+        style: function(feature){
+          return {
+            weight: 3,
+            opacity: 1,
+            color: 'white',
+            fillColor: colorTwo(feature.properties[$scope.chloroVal]),
+            fillOpacity: 0.8
+          };
+        }
+      }];
+
+      $scope.flag.change = !$scope.flag.change;
     };
 
     // SAMPLE CONFIG CODE
@@ -95,15 +147,15 @@ angular.module('rgisApp')
       //     };
       //   }
       // },
-    //   {
-    //     style: function(feature){
-    //       return {
-    //         weight: 0,
-    //         opacity: 1,
-    //         fillColor: colorTwo(feature.properties.PNTCNT),
-    //         fillOpacity: 0.8
-    //       };
-    //     }
-    //   },
+      // {
+      //   style: function(feature){
+      //     return {
+      //       weight: 0,
+      //       opacity: 1,
+      //       fillColor: colorTwo(feature.properties.PNTCNT),
+      //       fillOpacity: 0.8
+      //     };
+      //   }
+      // },
     // ];
   });

@@ -7,11 +7,14 @@ angular.module('rgisApp')
       scope: {
         data: '=',
         type: '=',
-        config: '='
+        config: '=',
+        flag: '='
       },
       controller: ['$scope', '$http', function($scope){
         // Initialize map
-        $scope.map = L.mapbox.map('map', 'lamkeewei.h6p10hml');
+        $scope.map = L.mapbox.map('map', 'lamkeewei.h6p10hml', {
+          scrollWheelZoom: false
+        });
         // $scope.map.setView([1.321651, 103.932106], 10);
 
         this.disableDrag = function(){
@@ -57,7 +60,18 @@ angular.module('rgisApp')
         loadLayers();
 
         scope.$watch('data', function(newVal, oldVal){
-          console.log('map layers changed');
+          layerGrp.clearLayers();
+          loadLayers();
+        }, true);
+
+        scope.$watch('config', function(newVal, oldVal){
+          console.log('changed config');
+          layerGrp.clearLayers();
+          loadLayers();
+        }, true);
+
+        scope.$watch('flag', function(newVal, oldVal){
+          console.log('changed config');
           layerGrp.clearLayers();
           loadLayers();
         }, true);
