@@ -9,14 +9,14 @@
     </div>
 
     <div class="form-group" ng-show="regressionLayer >= 0">
-      <label for="">Select Dependent Variable:</label>
+      <label for="">Select Dependent Variables:</label>
       <select ng-model="dependentVariable" class="form-control">
         <option ng-hide="var === '$$hashKey'" ng-repeat="var in variables">{{var}}</option>
       </select>
     </div>
 
     <div class="form-group" ng-show="regressionLayer >= 0">
-      <label for="">Select Independent Variable:</label>
+      <label for="">Select One or More Independent Variables:</label>
       <select ng-model="independentVariable" id="textarea-independent" multiple class="form-control">
         <option ng-hide="var === '$$hashKey'" ng-repeat="var in variables">{{var}}</option>
       </select>
