@@ -4,9 +4,9 @@ angular.module('rgisApp')
   .controller('AnalyzeCtrl', function ($scope, Data, $http, d3, _, colorbrewer, $location, Map, Color) {
     $scope.uniqueName = Data.getUniqueName();
 
-    // if(!$scope.uniqueName){
-    //   $location.path('/');
-    // }
+    if(!$scope.uniqueName){
+      $location.path('/');
+    }
 
     // Set active panel in analyze page
     $scope.active = 'settings';
