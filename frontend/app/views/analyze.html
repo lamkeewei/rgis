@@ -1,5 +1,9 @@
 <div class="full-container">
   <div map data="Map.mapLayers" config="Map.config" flag="flags.change" id="map">
+    <div ng-show="flags.gwrRun" id="legend">
+      <strong>Legend:</strong>
+      <div color-scale></div>
+    </div>
     <div sidebar id="sidebar">
         <div class="navigation">
           <div slide-trigger="settings" class="plugin-selector">

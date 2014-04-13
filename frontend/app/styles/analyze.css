@@ -1,3 +1,16 @@
+#legend {
+  height: 75px;
+  width: 300px;
+  background-color: white;
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  z-index: 9999;
+  border-radius: 5px;
+  box-sizing: border-bxo;
+  padding: 5px 10px;
+}
+
 #plot {
   font-size: 70%;
 }
