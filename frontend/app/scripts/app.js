@@ -1,14 +1,20 @@
 'use strict';
 
-angular.module('rgisApp', [
+var app = angular.module('rgisApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
   'ngRoute',
   'ui.bootstrap',
   'angularFileUpload'
-])
-  .config(function ($routeProvider) {
+]);
+
+app.config(function ($controllerProvider, $routeProvider) {
+    app._controller = app.controller;
+    app.controller = function( name, constructor ) {
+      $controllerProvider.register(name, constructor);
+      return(this);
+    };
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
