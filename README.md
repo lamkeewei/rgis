@@ -2,6 +2,33 @@
 
 An interactive application that aims to make R and GIS sexy for all. 
 
+## Deploying RGIS
+
+__Activating the Virtual Environment__
+
+- The dependencies for this project are managed in a [virtualenv](https://pypi.python.org/pypi/virtualenv "virtualenv") so that the development environment is totally reproducible on other machines
+- Navigate to the root `rgis` folder in your command prompt/terminal
+- Execute the command `source ./backend/hellodjango/venv/bin/activate`
+
+__Creating the Database__
+
+- `createdb djangodb`: to create a database named 'djangodb' 
+- Run `python manage.py syncdb` 
+    - Creates all the necessary tables for this project
+    - You will be prompted to create the superuser account. This is optional and can be used to access the Django admin at http://localhost:8000/admin for managing your database records.
+
+__Starting Rserve__
+
+- Install Rserve following the [installation instructions here](http://www.rforge.net/Rserve/doc.html#inst "Install Rserve")
+- Execute `R CMD Rserve.dbg`: for debug mode, or
+- `R CMD Rserve`: in the background
+
+__Starting RGIS__
+
+- Navigate to the `rgis/backend/hellodjango` directory
+- `python manage.py runserver 8000`: Start the development server at http://127.0.0.1:8000/
+
+# API Reference
 ## Shapefile Data Upload
 
 __URL Pattern:__ /api/upload  
@@ -166,28 +193,3 @@ __Expected Response (Error)__
   message: 'Provide appropriate error message'
 }
 ```
-## Deploying RGIS
-
-__Activating the Virtual Environment__
-
-- The dependencies for this project are managed in a [virtualenv](https://pypi.python.org/pypi/virtualenv "virtualenv") so that the development environment is totally reproducible on other machines
-- Navigate to the root `rgis` folder in your command prompt/terminal
-- Execute the command `source ./backend/hellodjango/venv/bin/activate`
-
-__Creating the Database__
-
-- `createdb djangodb`: to create a database named 'djangodb' 
-- Run `python manage.py syncdb` 
-    - Creates all the necessary tables for this project
-    - You will be prompted to create the superuser account. This is optional and can be used to access the Django admin at http://localhost:8000/admin for managing your database records.
-
-__Starting Rserve__
-
-- Install Rserve following the [installation instructions here](http://www.rforge.net/Rserve/doc.html#inst "Install Rserve")
-- Execute `R CMD Rserve.dbg`: for debug mode, or
-- `R CMD Rserve`: in the background
-
-__Starting RGIS__
-
-- Navigate to the `rgis/backend/hellodjango` directory
-- `python manage.py runserver 8000`: Start the development server at http://127.0.0.1:8000/
