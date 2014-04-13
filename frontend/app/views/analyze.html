@@ -1,29 +1,23 @@
 <div class="full-container">
-  <div map data="mapLayers" config="config" flag="flag" id="map">
+  <div map data="Map.mapLayers" config="Map.config" flag="flags.change" id="map">
     <div sidebar id="sidebar">
         <div class="navigation">
-          <div panel="settings" slide-trigger="1" class="plugin-selector">
+          <div slide-trigger="settings" class="plugin-selector">
             <span class="icon glyphicon glyphicon-eye-open"></span><br/>
             Layers
           </div>
-          <div panel="style" slide-trigger="2" class="plugin-selector">
+          <div slide-trigger="style" class="plugin-selector">
             <span class="icon glyphicon glyphicon-tint"></span><br/>
             STYLE
           </div>
-          <div panel="kde" slide-trigger="2" class="plugin-selector">
+          <div slide-trigger="kde" class="plugin-selector">
             <span class="icon glyphicon glyphicon-fire"></span><br/>
             KDE
           </div>
-          <div panel="gwr" slide-trigger="3" class="plugin-selector">
+          <div slide-trigger="gwr" class="plugin-selector">
             <span class="icon glyphicon glyphicon-signal"></span><br/>
             GWR
           </div>
-          <!--
-          <div slide-trigger="4" class="plugin-selector">
-            <span class="icon glyphicon glyphicon-plus"></span><br/>
-            ADD
-          </div>
-          -->
         </div>
         <div class="plugin-input">
           <div class="panel" id="settings">
@@ -45,14 +39,14 @@
             <h2>KDE Style Settings</h2>
             <div class="form-group">
               <label class="control-label">Color Scheme:</label>
-              <select ng-model="kdeColor" class="form-control">
+              <select ng-model="Color.kdeColor" class="form-control">
                 <option ng-repeat="v in cb">{{v}}</option>
               </select>
             </div>
 
             <div class="form-group">
               <label class="control-label">Number of classes:</label>
-              <select ng-model="kdeClass" class="form-control">
+              <select ng-model="Color.kdeClass" class="form-control">
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
@@ -68,14 +62,14 @@
             <h2>GWR Style Settings</h2>
             <div class="form-group">
               <label class="control-label">Color Scheme:</label>
-              <select ng-model="gwrColor" class="form-control">
+              <select ng-model="Color.gwrColor" class="form-control">
                 <option ng-repeat="v in cb">{{v}}</option>
               </select>
             </div>
 
             <div class="form-group">
               <label class="control-label">Number of classes:</label>
-              <select ng-model="gwrClass" class="form-control">
+              <select ng-model="Color.gwrClass" class="form-control">
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
@@ -88,77 +82,8 @@
               </select>
             </div>
           </div>
-
-          <div class="panel" id="kde">
-            <h1>Kernel Density Estimation</h1>
-            <form role="form">
-              <div class="form-group">
-                <label for="">Select Point Layer:</label>
-                <select ng-model="point" class="form-control">
-                  <option ng-repeat="(key, value) in data" value="{{value.name}}">{{value.name | stripUnique}}</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="">Select Window Layer:</label>
-                <select ng-model="window" class="form-control">
-                  <option ng-repeat="(key, value) in data" value="{{value.name}}">{{value.name| stripUnique}}</option>
-                </select>
-              </div>
-
-              <div class="form-group" ng-hide="running">
-                <button class="btn btn-sm btn-success" ng-click="initKFunction()">Plot Graph</button>
-              </div>
-            </form>
-
-            <progressbar ng-show="running" class="progress-striped active" value="100">Processing your request...</progressbar>
-            <div id="plot" plot-area data="graph" callback="calcKDE(val)"></div>
-          </div>
-          
-          <div class="panel" id="gwr"> 
-            <h1>Geographically Weighted Regression</h1>
-            <form role="form">
-              <div class="form-group">
-                <label for="">Select Layer:</label>
-                <select class="form-control" ng-model="regressionLayer">
-                  <option ng-repeat="(key, value) in data" value="{{$index}}">{{value.name | stripUnique}}</option>
-                </select>
-              </div>
-
-              <div class="form-group" ng-show="regressionLayer >= 0">
-                <label for="">Select Dependent Variable:</label>
-                <select ng-model="dependentVariable" class="form-control">
-                  <option ng-hide="var === '$$hashKey'" ng-repeat="var in variables">{{var}}</option>
-                </select>
-              </div>
-
-              <div class="form-group" ng-show="regressionLayer >= 0">
-                <label for="">Select Independent Variable:</label>
-                <select ng-model="independentVariable" id="textarea-independent" multiple class="form-control">
-                  <option ng-hide="var === '$$hashKey'" ng-repeat="var in variables">{{var}}</option>
-                </select>
-              </div>
-
-              <div ng-hide="running" class="form-group" ng-show="regressionLayer >= 0">
-                <button class="btn btn-sm btn-success" ng-click="initGWR()">Execute</button>
-              </div>
-            </form>
-
-            <progressbar ng-show="running" class="progress-striped active" value="100">Processing your request...</progressbar>
-            
-            <div ng-show="chloroVars">
-              <h2>Select Chloropleth Variable</h2>
-              <div class="form-group">
-                <select class="form-control" ng-model="chloroVal">
-                  <option ng-repeat="v in chloroVars">{{v}}</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <button class="btn btn-sm btn-success" ng-click="setChloro()">Plot</button>
-              </div>
-            </div>
-          </div>
+          <div plugin="kde"></div>
+          <div plugin="gwr"></div>
       </div>
     </div>
   </div>

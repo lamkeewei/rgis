@@ -12,8 +12,8 @@ angular.module('rgisApp')
           angular.forEach(panels, function(d){
             angular.element(d).css('display', 'none');
           });
-          var el = document.getElementById(attrs.panel);
-          scope.active = attrs.panel;
+          var el = document.getElementById(attrs.slideTrigger);
+          scope.active = attrs.slideTrigger;
           angular.element(el).css('display', 'block');
           
 

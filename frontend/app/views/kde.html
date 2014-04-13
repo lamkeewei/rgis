@@ -1,0 +1,25 @@
+<div class="panel" id="kde" ng-controller="KdeCtrl">
+  <h1>Kernel Density Estimation</h1>
+  <form role="form">
+    <div class="form-group">
+      <label for="">Select Point Layer:</label>
+      <select ng-model="point" class="form-control">
+        <option ng-repeat="(key, value) in data" value="{{value.name}}">{{value.name | stripUnique}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="">Select Window Layer:</label>
+      <select ng-model="window" class="form-control">
+        <option ng-repeat="(key, value) in data" value="{{value.name}}">{{value.name| stripUnique}}</option>
+      </select>
+    </div>
+
+    <div class="form-group" ng-hide="running">
+      <button class="btn btn-sm btn-success" ng-click="initKFunction()">Plot Graph</button>
+    </div>
+  </form>
+
+  <progressbar ng-show="flags.running" class="progress-striped active" value="100">Processing your request...</progressbar>
+  <div id="plot" plot-area data="graph" callback="calcKDE(val)"></div>
+</div>
