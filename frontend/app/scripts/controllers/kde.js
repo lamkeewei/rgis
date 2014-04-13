@@ -6,7 +6,7 @@ angular.module('rgisApp')
     $scope.Color = Color;
 
     $scope.initKFunction = function(){
-      $scope.flags.running = true;
+      $scope.flags.running = true; // Refactor out to a global state service
       var data = {
         window: $scope.window,
         point: $scope.point
@@ -32,7 +32,7 @@ angular.module('rgisApp')
         var geojson = data;
         $scope.Map.mapLayers = [geojson];
 
-        var colors = $scope.getColorScale(geojson, 'level', colorbrewer[$scope.Color.kdeColor][$scope.Color.kdeClass]);
+        var colors = $scope.Color.getColorScale(geojson, 'level', colorbrewer[$scope.Color.kdeColor][$scope.Color.kdeClass]);
         $scope.Map.config = [{
           style: function(feature){
             return {
@@ -45,8 +45,8 @@ angular.module('rgisApp')
         }];
 
         $scope.flags.running = false;
-        $scope.flags.kdeRun = true;
-        $scope.flags.gwrRun = false;
+        $scope.flags.kdeRun = true; // Refactor to a global state service
+        $scope.flags.gwrRun = false; // Refactor to a global state service
         Map.activeLayers = [];
       }).error(function(){
         $scope.flags.running = false;
@@ -58,7 +58,7 @@ angular.module('rgisApp')
         return;
       }
 
-      var colors = $scope.getColorScale($scope.Map.mapLayers[0], 'level', colorbrewer[$scope.Color.kdeColor][$scope.Color.kdeClass]);
+      var colors = $scope.Color.getColorScale($scope.Map.mapLayers[0], 'level', colorbrewer[$scope.Color.kdeColor][$scope.Color.kdeClass]);
       $scope.Map.config = [{
         style: function(feature){
           return {

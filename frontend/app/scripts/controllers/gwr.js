@@ -42,7 +42,7 @@ angular.module('rgisApp')
     };
 
     $scope.setChloro = function(){
-      var colorTwo = $scope.getColorScale($scope.Map.mapLayers[$scope.gwrIndex], $scope.chloroVal, colorbrewer[$scope.Color.gwrColor][$scope.Color.gwrClass]);
+      var colorTwo = $scope.Color.getColorScale($scope.Map.mapLayers[$scope.gwrIndex], $scope.chloroVal, colorbrewer[$scope.Color.gwrColor][$scope.Color.gwrClass]);
       
       $scope.Map.config = [{
         style: function(feature){
@@ -64,7 +64,7 @@ angular.module('rgisApp')
         return;
       }
 
-      var colorTwo = $scope.getColorScale($scope.Map.mapLayers[0], $scope.chloroVal, colorbrewer[$scope.Color.gwrColor][$scope.Color.gwrClass]);
+      var colorTwo = $scope.Color.getColorScale($scope.Map.mapLayers[0], $scope.chloroVal, colorbrewer[$scope.Color.gwrColor][$scope.Color.gwrClass]);
       
       $scope.Map.config = [{
         style: function(feature){

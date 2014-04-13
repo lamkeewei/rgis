@@ -20,9 +20,9 @@ angular.module('rgisApp')
       });
     };
 
-    // if(!$scope.uniqueName){
-    //   $scope.init();
-    // }
+    if(!$scope.uniqueName){
+      $scope.init();
+    }
 
     $scope.data = Data.getData().dataLayer;
     $scope.selectDataName = 0;
