@@ -24,18 +24,24 @@ angular.module('rgisApp')
             .attr('x', function(d, i) { return i * width; });
 
         svg.append('text')
+          .attr('id', 'min-val')
           .attr('y', 25)
           .attr('font-size', '9pt')
           .text('Low');
 
         svg.append('text')
+          .attr('id', 'max-val')
           .attr('x', 240)
           .attr('y', 25)
           .attr('font-size', '9pt')
           .text('High');
 
         scope.$watch('Color', function(newVal, oldVal){
-          console.log('colorChanged');
+          if(scope.Color.range.length > 0){
+            var range = scope.Color.range;
+            d3.select('#min-val').text(range[0].toFixed(3));
+            d3.select('#max-val').text(range[1].toFixed(3));
+          }
           var color = newVal;
           var colorScheme = colorbrewer[newVal.gwrColor][newVal.gwrClass];
 
