@@ -22,7 +22,7 @@ apt-get install -y libjpeg-dev libtiff-dev zlib1g-dev libfreetype6-dev liblcms2-
 # Git (we'd rather avoid people keeping credentials for git commits in the repo, but sometimes we need it for pip requirements that aren't in PyPI)
 apt-get install -y git
 # R
-apt-get install -y r-base
+apt-get install -y r-base r-base-dev
 
 # Postgresql
 if ! command -v psql; then
@@ -35,29 +35,16 @@ fi
 if ! command -v pip; then
     easy_install -U pip
 fi
-if [[ ! -f /usr/local/bin/virtualenv ]]; then
-    easy_install virtualenv virtualenvwrapper stevedore virtualenv-clone
-fi
 
 # bash environment global setup
 cp -p /vagrant_data/bashrc /home/vagrant/.bashrc
 
-# install our common Python packages in a temporary virtual env so that they'll get cached
-# if [[ ! -e /home/vagrant/.pip_download_cache ]]; then
-#     su - vagrant -c "mkdir -p /home/vagrant/.pip_download_cache && \
-#         virtualenv /home/vagrant/yayforcaching && \
-#         PIP_DOWNLOAD_CACHE=/home/vagrant/.pip_download_cache /home/vagrant/yayforcaching/bin/pip install -r /vagrant_data/common_requirements.txt && \
-#         rm -rf /home/vagrant/yayforcaching"
-# fi
+# Install python dependencies 
+pip install -r /vagrant/backend/hellodjango/requirements.txt
 
-# Node.js
-if ! command -v npm; then
-    wget http://nodejs.org/dist/v0.10.0/node-v0.10.0.tar.gz
-    tar xzf node-v0.10.0.tar.gz
-    cd node-v0.10.0/
-    ./configure && make && make install
-    cd ..
-    rm -rf node-v0.10.0/ node-v0.10.0.tar.gz
-fi
-
-sudo pip install -r /vagrant/backend/hellodjango/requirements.txt
+# Create use for database
+echo 'Creating PostgreSQL databases and role....'
+sudo su postgres << EOF
+    createuser -s admin
+    createdb djangodb
+EOF
