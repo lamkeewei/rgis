@@ -2,13 +2,12 @@
 
 An interactive application that aims to make R and GIS sexy for all. 
 
+## Setting up environment
+- Install vagrant
+- run `sudo pip install -r /vagrant/backend/hellodjango/requirements.txt`
+- create the postgres user `createuser admin`
+
 ## Deploying RGIS
-
-__Activating the Virtual Environment__
-
-- The dependencies for this project are managed in a [virtualenv](https://pypi.python.org/pypi/virtualenv "virtualenv") so that the development environment is totally reproducible on other machines
-- Navigate to the root `rgis` folder in your command prompt/terminal
-- Execute the command `source ./backend/hellodjango/venv/bin/activate`
 
 __Creating the Database__
 
