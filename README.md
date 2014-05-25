@@ -26,7 +26,7 @@ __Starting Rserve__
 __Starting RGIS__
 
 - Navigate to the `rgis/backend/hellodjango` directory
-- `python manage.py runserver 8000`: Start the development server at http://127.0.0.1:8000/
+- `python manage.py runserver 0.0.0.0:8080`
 
 # API Reference
 ## Shapefile Data Upload
