@@ -23,6 +23,8 @@ apt-get install -y libjpeg-dev libtiff-dev zlib1g-dev libfreetype6-dev liblcms2-
 apt-get install -y git
 # R
 apt-get install -y r-base r-base-dev
+# GDAL
+apt-get install gdal-bin
 
 # Postgresql
 if ! command -v psql; then
@@ -39,12 +41,13 @@ fi
 # bash environment global setup
 cp -p /vagrant_data/bashrc /home/vagrant/.bashrc
 
-# Install python dependencies 
+# Install python dependencies
+echo 'Installing Django dependencies'
 pip install -r /vagrant/backend/hellodjango/requirements.txt
 
 # Create use for database
 echo 'Creating PostgreSQL databases and role....'
-sudo su postgres << EOF
+su postgres << EOF
     createuser -s admin
     createdb djangodb
 EOF
