@@ -12,6 +12,7 @@ __Activating the Virtual Environment__
 
 __Creating the Database__
 
+- Run `sudo su - postgres` to sign in as postgres to run the following commands
 - `createdb djangodb`: to create a database named 'djangodb' 
 - Run `python manage.py syncdb` 
     - Creates all the necessary tables for this project
