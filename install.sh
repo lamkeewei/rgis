@@ -23,6 +23,11 @@ apt-get install -y libjpeg-dev libtiff-dev zlib1g-dev libfreetype6-dev liblcms2-
 apt-get install -y git
 # R
 apt-get install -y r-base r-base-dev
+# Add source for latest R
+echo "deb http://www.stats.bris.ac.uk/R/bin/linux/ubuntu saucy/" >> /etc/apt/sources.list
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+apt-get update -y
+apt-get upgrade -y
 # GDAL
 apt-get install gdal-bin
 
