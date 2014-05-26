@@ -22,12 +22,10 @@ apt-get install -y libjpeg-dev libtiff-dev zlib1g-dev libfreetype6-dev liblcms2-
 # Git (we'd rather avoid people keeping credentials for git commits in the repo, but sometimes we need it for pip requirements that aren't in PyPI)
 apt-get install -y git
 # R
-apt-get install -y r-base r-base-dev
-# Add source for latest R
 echo "deb http://www.stats.bris.ac.uk/R/bin/linux/ubuntu saucy/" >> /etc/apt/sources.list
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-apt-get update -y
-apt-get upgrade -y
+apt-get install -y r-base r-base-dev
+
 # GDAL
 apt-get install gdal-bin
 
