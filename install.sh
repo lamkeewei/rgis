@@ -27,7 +27,7 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 apt-get update -y
 apt-get install -y r-base r-base-dev
 # GDAL
-apt-get install gdal-bin
+apt-get install -y gdal-bin
 
 # Postgresql
 if ! command -v psql; then
