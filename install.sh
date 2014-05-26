@@ -24,8 +24,8 @@ apt-get install -y git
 # R
 echo "deb http://www.stats.bris.ac.uk/R/bin/linux/ubuntu saucy/" >> /etc/apt/sources.list
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+apt-get update -y
 apt-get install -y r-base r-base-dev
-
 # GDAL
 apt-get install gdal-bin
 
