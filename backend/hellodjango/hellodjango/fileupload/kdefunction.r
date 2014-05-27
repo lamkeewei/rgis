@@ -29,6 +29,7 @@ KDE_function <-function (windowLayer, pointLayer, bandwidth, outputfolder, shpfi
   raster2ContourSHP<- function(rasterPath, layerName, outputFolder) {
     library(rgdal)
     library(maptools)
+    print(outputFolder)
     setwd(outputFolder)
     dem <- readGDAL(rasterPath)
     im <- as.image.SpatialGridDataFrame(dem)
@@ -48,7 +49,6 @@ KDE_function <-function (windowLayer, pointLayer, bandwidth, outputfolder, shpfi
   # let x be point layer
   y <- loadOwin(windowLayer)
   x <- loadPoints(pointLayer, y )
-
   #Convert the generic sp format into spatstat's pp format
   nm_ppp <- as(x, "ppp")
 
@@ -66,7 +66,7 @@ KDE_function <-function (windowLayer, pointLayer, bandwidth, outputfolder, shpfi
 
   #create tempfile path
   tempFilePath <- paste(outputfolder, shpfilename, "_temp.GTiff", sep = "")
-
+  
   #write the kde raster into ESRI grid format
   r <- writeGDAL(gridded_kde, drivername = "GTiff", copy_drivername = "GTiff", tempFilePath)
 

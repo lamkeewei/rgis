@@ -12,6 +12,7 @@ from hellodjango.fileupload.utility import shapefileToGeoJSON
 
 from zipreader import fileiterator
 
+import os
 import zipfile
 import requests
 import json
@@ -20,6 +21,7 @@ import pyRserve
 import time
 import pipes
 import commands
+import subprocess
 import requests
 import urllib
 import shutil
@@ -92,13 +94,13 @@ def shapefile_upload(request):
         window_zip_file.save()
 
         # now unzip the file
-        original_zipfile = open(settings.MEDIA_ROOT+window_zip_file.zipfile.name, 'rb')
+        original_zipfile = open(os.path.join(settings.MEDIA_ROOT, window_zip_file.zipfile.name), 'rb')
         windowzipfile = zipfile.ZipFile(original_zipfile)
 
         # gets the name of the files in the zip
         realfilename = windowzipfile.namelist()[0][:-4]
 
-        windowzipfile.extractall(settings.MEDIA_ROOT+"shapefile/"+request.POST['name'])
+        windowzipfile.extractall(os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name']))
         # windows path
         # windowzipfile.extractall(settings.MEDIA_ROOT+"shapefile\\"+request.POST['name'])
         # original_zipfile.close()
@@ -141,13 +143,14 @@ def shapefile_upload(request):
             epsgCode = request.POST['projection'] # user specified a projection
 
         # convert to geojson
-        source_filename = pipes.quote(window_zip_file.get_full_path() + ".shp")
-        output_filename = pipes.quote(window_zip_file.get_full_path() + ".geojson")
-        print commands.getoutput("ogr2ogr -f GeoJSON -s_srs " + epsgCode + " -t_srs EPSG:4326 " + output_filename + " " + source_filename)
+        source_filename = window_zip_file.get_full_path() + ".shp"
+        output_filename = window_zip_file.get_full_path() + ".geojson"
+        print subprocess.call("ogr2ogr -f GeoJSON -s_srs " + epsgCode + " -t_srs EPSG:4326 " + output_filename + " " + source_filename)
 
         # change projection
-        output_filename = pipes.quote(window_zip_file.get_full_path() + "projected.shp")
-        print commands.getoutput("ogr2ogr -f \"ESRI Shapefile\" -s_srs " + epsgCode + " -t_srs EPSG:4326 " + output_filename + " " + source_filename)
+        output_filename = window_zip_file.get_full_path() + "projected.shp"
+        print "ogr2ogr -f \"ESRI Shapefile\" -s_srs " + epsgCode + " -t_srs EPSG:4326 " + output_filename + " " + source_filename
+        print subprocess.call("ogr2ogr -f \"ESRI Shapefile\" -s_srs " + epsgCode + " -t_srs EPSG:4326 " + output_filename + " " + source_filename)
 
         # output the geojson
         with open (window_zip_file.get_full_path() + ".geojson", "rb") as geojsonfile:
@@ -242,7 +245,8 @@ def kfunction_initialize(request):
         except:
             message = "error running l-function in r"
             return HttpResponse(json.dumps({"status":"error", "message":message}), content_type="application/json")
-
+        finally: 
+            conn.close()
         response = {}
         response['status'] = 'success'
         response['type'] = 'graph'
@@ -301,9 +305,9 @@ def kde_function(request):
 
         conn.voidEval(functionContent)
 
-        output_path = settings.BASE_DIR + '/kdeoutputs/'
+        # output_path = settings.BASE_DIR + '/kdeoutputs/'
         ##windows path
-        # output_path = settings.BASE_DIR + '\\kdeoutputs\\'
+        output_path = os.path.join(settings.BASE_DIR,'kdeoutputs')
         output_name = str(uuid.uuid4()).replace("-", "")
 
         print output_path
@@ -315,18 +319,19 @@ def kde_function(request):
             resultsJson = conn.r.KDE_function(window_filename, point_filename, bandwidth, output_path, output_name)
 
             # convert to geojson
-            source_filename = pipes.quote(output_path + output_name + ".shp")
-            output_filename = pipes.quote(output_path + output_name + ".geojson")
-            print commands.getoutput("ogr2ogr -f GeoJSON -s_srs EPSG:4326 -t_srs EPSG:4326 " + output_filename + " " + source_filename)
+            source_filename = os.path.join(output_path, output_name + ".shp")
+            output_filename = os.path.join(output_path, output_name + ".geojson")
+            print subprocess.call("ogr2ogr -f GeoJSON -s_srs EPSG:4326 -t_srs EPSG:4326 " + output_filename + " " + source_filename)
 
             # output the geojson
-            with open (output_path + output_name + ".geojson", "rb") as geojsonfile:
+            with open (os.path.join(output_path,output_name + ".geojson"), "rb") as geojsonfile:
                 outputgeojson = json.loads(geojsonfile.read().replace('\n', ''))
 
         except:
             message = "error running kde function in r"
             return HttpResponse(json.dumps({"status":"error", "message":message}), content_type="application/json")
-
+        finally:
+            conn.close()
 
         response = json.dumps(outputgeojson, indent=2)
 

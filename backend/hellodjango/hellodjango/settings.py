@@ -83,11 +83,12 @@ DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
         'NAME': 'djangodb',
-        'USER': 'admin',
+        'USER': 'postgres',
+        'PASSWORD': 'password'
     }
 }
 
-MEDIA_ROOT = BASE_DIR + '/uploads/'
+MEDIA_ROOT = os.path.join(BASE_DIR + '/uploads/')
 MEDIA_URL = '/uploads/'
 ##windows path
 # MEDIA_ROOT = BASE_DIR + '\\uploads\\'
