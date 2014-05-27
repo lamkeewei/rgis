@@ -99,7 +99,7 @@ def shapefile_upload(request):
         realfilename = windowzipfile.namelist()[0][:-4]
 
         windowzipfile.extractall(settings.MEDIA_ROOT+"shapefile/"+request.POST['name'])
-        windows path
+        # windows path
         # windowzipfile.extractall(settings.MEDIA_ROOT+"shapefile\\"+request.POST['name'])
         # original_zipfile.close()
 
