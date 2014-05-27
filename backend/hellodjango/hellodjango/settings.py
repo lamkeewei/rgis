@@ -87,11 +87,11 @@ DATABASES = {
     }
 }
 
-##MEDIA_ROOT = BASE_DIR + '/uploads/'
-##MEDIA_URL = '/uploads/'
+MEDIA_ROOT = BASE_DIR + '/uploads/'
+MEDIA_URL = '/uploads/'
 ##windows path
-MEDIA_ROOT = BASE_DIR + '\\uploads\\'
-MEDIA_URL = '\\uploads\\'
+# MEDIA_ROOT = BASE_DIR + '\\uploads\\'
+# MEDIA_URL = '\\uploads\\'
 
 # set max size to 10 MB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
@@ -124,17 +124,17 @@ STATIC_ROOT = 'staticfiles'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-##STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 ##windows path
-STATIC_URL = '\\static\\'
+# STATIC_URL = '\\static\\'
 
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static'),
-#     "../../frontend/app",
-# )
-
-##windows path
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
-    "..\\..\\frontend\\app",
+    "../../frontend/app",
 )
+
+##windows path
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
+#     "..\\..\\frontend\\app",
+# )

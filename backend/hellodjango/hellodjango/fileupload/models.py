@@ -17,6 +17,6 @@ class Shapefile(models.Model):
     def __unicode__(self):
         return "path: " + str(self.zipfile.url) + " filename: " + str(self.filename)
     def get_full_path(self):
-        ##return settings.MEDIA_ROOT + "shapefile/" + self.name + "/" + self.filename
-        ##windows path
-        return settings.MEDIA_ROOT + "shapefile\\" + self.name + "\\" + self.filename
+        return settings.MEDIA_ROOT + "shapefile/" + self.name + "/" + self.filename
+        windows path
+        # return settings.MEDIA_ROOT + "shapefile\\" + self.name + "\\" + self.filename

@@ -98,10 +98,10 @@ def shapefile_upload(request):
         # gets the name of the files in the zip
         realfilename = windowzipfile.namelist()[0][:-4]
 
-        ##windowzipfile.extractall(settings.MEDIA_ROOT+"shapefile/"+request.POST['name'])
-        ##windows path
-        windowzipfile.extractall(settings.MEDIA_ROOT+"shapefile\\"+request.POST['name'])
-        original_zipfile.close()
+        windowzipfile.extractall(settings.MEDIA_ROOT+"shapefile/"+request.POST['name'])
+        windows path
+        # windowzipfile.extractall(settings.MEDIA_ROOT+"shapefile\\"+request.POST['name'])
+        # original_zipfile.close()
 
         # save the real file name
         window_zip_file.filename = realfilename
@@ -216,9 +216,9 @@ def kfunction_initialize(request):
         print "got the jsons\n"
 
         # load the function
-        ##functionFile = open(settings.BASE_DIR + '/fileupload/lfunction.r')
+        functionFile = open(settings.BASE_DIR + '/fileupload/lfunction.r')
         ##windows path
-        functionFile = open(settings.BASE_DIR + '\\fileupload\\lfunction.r')
+        # functionFile = open(settings.BASE_DIR + '\\fileupload\\lfunction.r')
         functionContent = functionFile.read()
 
         conn.voidEval(functionContent)
@@ -293,17 +293,17 @@ def kde_function(request):
         # print window_filename
 
         # load the function
-        ##functionFile = open(settings.BASE_DIR + '/fileupload/kdefunction.r')
+        functionFile = open(settings.BASE_DIR + '/fileupload/kdefunction.r')
         ##windows path
-        functionFile = open(settings.BASE_DIR + '\\fileupload\\kdefunction.r')
+        # functionFile = open(settings.BASE_DIR + '\\fileupload\\kdefunction.r')
         print functionFile
         functionContent = functionFile.read()
 
         conn.voidEval(functionContent)
 
-        ##output_path = settings.BASE_DIR + '/kdeoutputs/'
+        output_path = settings.BASE_DIR + '/kdeoutputs/'
         ##windows path
-        output_path = settings.BASE_DIR + '\\kdeoutputs\\'
+        # output_path = settings.BASE_DIR + '\\kdeoutputs\\'
         output_name = str(uuid.uuid4()).replace("-", "")
 
         print output_path
@@ -365,9 +365,9 @@ def gwr_initialize(request):
         shapefile_filename = shapefile_object.get_full_path() + "projected"
 
         # load the function
-        ##functionFile = open(settings.BASE_DIR + '/fileupload/new.r')
+        functionFile = open(settings.BASE_DIR + '/fileupload/new.r')
         ##windows path
-        functionFile = open(settings.BASE_DIR + '\\fileupload\\new.r')
+        # functionFile = open(settings.BASE_DIR + '\\fileupload\\new.r')
         functionContent = functionFile.read()
 
         conn.voidEval(functionContent)
@@ -427,17 +427,17 @@ def gwr_plot(request):
         conn = pyRserve.connect()
 
         # prepare the r function
-        ##functionFile = open(settings.BASE_DIR + '/fileupload/plotGWR.r')
+        functionFile = open(settings.BASE_DIR + '/fileupload/plotGWR.r')
         ##windows path
-        functionFile = open(settings.BASE_DIR + '\\fileupload\\plotGWR.r')
+        # functionFile = open(settings.BASE_DIR + '\\fileupload\\plotGWR.r')
         functionContent = functionFile.read()
 
         conn.voidEval(functionContent)
 
         # set the file path for the output shapefile
-        ##output_path = settings.BASE_DIR + '/gwroutputs/'
+        output_path = settings.BASE_DIR + '/gwroutputs/'
         ##windows path
-        output_path = settings.BASE_DIR + '\\gwroutputs\\'
+        # output_path = settings.BASE_DIR + '\\gwroutputs\\'
         output_name = shapefile_filename + str(uuid.uuid4()).replace("-", "")[:10]
 
         try:
