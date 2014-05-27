@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     url(r'^api/plugin/correlation/initialize/$', views.gwr_initialize, name='gwr_initialize'),
     url(r'^api/plugin/correlation/plot/$', views.gwr_plot, name='gwr_plot'),
     url(r'^api/get_csrftoken/$', views.get_csrftoken, name='get_csrftoken'),
+    url(r'^api/initialize/$', views.initialize_app, name='initialize_app'),
 )

@@ -4,6 +4,10 @@ angular.module('rgisApp')
   .controller('DataCtrl', function ($scope, $http, _, $modal, $log, Data) {
     $scope.uniqueName = Data.getUniqueName();
     $scope.init = function(){
+      $http.get('/fileupload/api/initialize/').success(function(){
+        console.log('reset');
+      });
+      
       var modal = $modal.open({
         templateUrl: 'views/signin.html',
         backdrop: 'static',

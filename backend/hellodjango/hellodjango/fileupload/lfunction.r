@@ -27,5 +27,6 @@ func0 <- function(window_file, points_file){
 
     jsonoutput = toJSON(list(r=E$r, obs=E$obs, lo=E$lo, hi=E$hi), pretty=FALSE, collapse="")
 
+    closeAllConnections()
     return(jsonoutput)
 }

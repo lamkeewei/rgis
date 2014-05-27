@@ -131,7 +131,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
-    "../../frontend/app",
+    "C:\\Users\\admin\\Desktop\\rgis\\frontend\\app",
 )
 
 ##windows path

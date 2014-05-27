@@ -73,4 +73,5 @@ KDE_function <-function (windowLayer, pointLayer, bandwidth, outputfolder, shpfi
   #call raster2Contour
   raster2ContourSHP(tempFilePath, shpfilename, outputfolder)
 
+  closeAllConnections()
 }

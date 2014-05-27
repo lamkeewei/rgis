@@ -13,6 +13,7 @@ from hellodjango.fileupload.utility import shapefileToGeoJSON
 from zipreader import fileiterator
 
 import os
+import shutil
 import zipfile
 import requests
 import json
@@ -27,6 +28,18 @@ import urllib
 import shutil
 import math
 import uuid
+
+def initialize_app(request):
+    Shapefile.objects.all().delete()
+
+    shapefilesLoc = os.path.join(settings.MEDIA_ROOT, 'shapefile');
+
+    if os.path.exists(shapefilesLoc):
+        shutil.rmtree(shapefilesLoc)
+
+    os.mkdir(shapefilesLoc)
+    return HttpResponse()
+
 
 def get_csrftoken(request):
     # This bit of code adds the CSRF bits to your request.
@@ -326,6 +339,7 @@ def kde_function(request):
             # output the geojson
             with open (os.path.join(output_path,output_name + ".geojson"), "rb") as geojsonfile:
                 outputgeojson = json.loads(geojsonfile.read().replace('\n', ''))
+                geojsonfile.close()
 
         except:
             message = "error running kde function in r"
@@ -474,7 +488,7 @@ def gwr_plot(request):
         # output the geojson
         with open (os.path.join(output_path, output_name + ".geojson"), "rb") as geojsonfile:
             outputgeojson = json.loads(geojsonfile.read().replace('\n', ''))
-
+            geojsonfile.close()
         # prepare response
         response = {}
         response['variables'] = variables

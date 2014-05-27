@@ -33,7 +33,7 @@ gwr_function <- function (inputFilePath, gwrFormula, gwrDirectoryPath, outputFil
   nums <- sapply(mydata, is.numeric)
 
   variables = names(mydata[ , nums])
-
+  closeAllConnections()
   return(variables)
 
   #return(list(variables = variables, significance = significance, variance_inflation_factors = variance_inflation_factors))
