@@ -387,6 +387,9 @@ def gwr_initialize(request):
             message = "error running function in r"
             return HttpResponse(json.dumps({"status":"error", "message":message}), content_type="application/json")
 
+        finally:
+            conn.close()
+
         response_obj = {}
         response_obj['status'] = "success"
         response_obj['variables'] = nameslist
@@ -440,7 +443,7 @@ def gwr_plot(request):
         conn.voidEval(functionContent)
 
         # set the file path for the output shapefile
-        output_path = settings.BASE_DIR + '/gwroutputs/'
+        output_path = os.path.join(settings.BASE_DIR, 'gwroutputs')
         ##windows path
         # output_path = settings.BASE_DIR + '\\gwroutputs\\'
         output_name = shapefile_filename + str(uuid.uuid4()).replace("-", "")[:10]
@@ -460,14 +463,16 @@ def gwr_plot(request):
         except:
             message = "error running function in r"
             return HttpResponse(json.dumps({"status":"error", "message":message}), content_type="application/json")
+        finally:
+            conn.close();
 
         # convert to geojson
-        source_filename = pipes.quote(output_path + output_name + ".shp")
-        output_filename = pipes.quote(output_path + output_name + ".geojson")
-        print commands.getoutput("ogr2ogr -f GeoJSON -s_srs EPSG:4326 -t_srs EPSG:4326 " + output_filename + " " + source_filename)
+        source_filename = os.path.join(output_path, output_name + ".shp")
+        output_filename = os.path.join(output_path, output_name + ".geojson")
+        print subprocess.call("ogr2ogr -f GeoJSON -s_srs EPSG:4326 -t_srs EPSG:4326 " + output_filename + " " + source_filename)
 
         # output the geojson
-        with open (output_path + output_name + ".geojson", "rb") as geojsonfile:
+        with open (os.path.join(output_path, output_name + ".geojson"), "rb") as geojsonfile:
             outputgeojson = json.loads(geojsonfile.read().replace('\n', ''))
 
         # prepare response
