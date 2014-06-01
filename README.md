@@ -29,6 +29,69 @@ __Starting RGIS__
 - `python manage.py runserver 0.0.0.0:8080`
 
 # API Reference
+
+## Get User's list of Shapefiles or Create User
+__URL Pattern:__ /api/user_files  
+__HTTP Method:__ POST  
+__Request:__ 
+```javascript
+{
+  username: 'jackrabbit'
+}
+```
+
+__Expected Response (Success)__
+```javascript
+// Successful response (user created)
+{
+  status: 'success'
+}
+
+// Successful response (user exists)
+{
+  status: 'success',
+  files: ['file 1', 'file 2', 'file 3', ...] 
+}
+```
+
+__Expected Response (Error)__
+```javascript
+// Error response
+{
+  status: 'error',
+  message: 'username not provided'
+}
+```
+
+## Get User's Shapefile in .geojson Format
+__URL Pattern:__ /api/get_user_file  
+__HTTP Method:__ POST  
+__Request:__ 
+```javascript
+{
+  username: 'jackrabbit',
+  name: 'carrotzone'
+}
+```
+
+__Expected Response (Success)__
+```javascript
+// Successful response
+{
+  // GeoJSON output
+}
+
+```
+
+__Expected Response (Error)__
+```javascript
+// Error response
+{
+  status: 'error',
+  message: 'username not provided'
+}
+```
+
 ## Shapefile Data Upload
 
 __URL Pattern:__ /api/upload  

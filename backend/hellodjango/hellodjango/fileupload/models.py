@@ -4,6 +4,9 @@ from hellodjango import settings
 import os
 # Create your models here.
 
+class User(models.Model):
+    name = models.CharField(max_length=150)
+
 class Plugin(models.Model):
     function_name = models.CharField(max_length=100)
     rscript = models.FileField(upload_to='plugins')
@@ -12,9 +15,10 @@ class Plugin(models.Model):
         return settings.MEDIA_ROOT + self.rscript.name
 
 class Shapefile(models.Model):
-    zipfile = models.FileField(upload_to='shapefile')
+    user = models.ForeignKey(User)
+    zipfile = models.FileField(upload_to='shapefile', null=True, blank=True)
     name = models.CharField(max_length=150)
-    filename = models.CharField(max_length=150,null=True, blank=True)
+    filename = models.CharField(max_length=150, null=True, blank=True)
     def __unicode__(self):
         return "path: " + str(self.zipfile.url) + " filename: " + str(self.filename)
     def get_full_path(self):

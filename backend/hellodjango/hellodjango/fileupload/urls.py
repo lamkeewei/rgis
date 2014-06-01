@@ -9,6 +9,8 @@ urlpatterns = patterns('',
     url(r'^api/plugin/$', views.plugin_upload_form, name='plugin_upload_form'),
     # /api/upload
     url(r'^api/upload/$', views.shapefile_upload, name='shapefile_upload'),
+    url(r'^api/user_files/$', views.user_files, name='user_files'),
+    url(r'^api/get_user_file/$', views.get_user_file, name='get_user_file'),
     # /api/plugin/kfunction/initialize
     url(r'^api/plugin/kfunction/initialize/$', views.kfunction_initialize, name='kfunction_initialize'),
     url(r'^api/plugin/kfunction/kde/$', views.kde_function, name='kde_function'),

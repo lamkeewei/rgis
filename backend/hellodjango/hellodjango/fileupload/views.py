@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from hellodjango import settings
 
-from hellodjango.fileupload.models import Plugin, Shapefile
+from hellodjango.fileupload.models import Plugin, Shapefile, User
 from hellodjango.fileupload.forms import *
 from hellodjango.fileupload.utility import shapefileToGeoJSON
 
@@ -92,18 +92,61 @@ def plugin_upload_form(request):
     )
 
 @csrf_exempt
+def user_files(request):
+
+    if request.method == "POST":
+
+        data = json.loads(request.body)
+
+        if not 'username' in data:
+            return HttpResponse(json.dumps({"status":"error","message": "username not provided"}))
+
+        username = data['username']
+
+        user, created = User.objects.get_or_create(name=username)
+
+        if created:
+            user.save()
+            return HttpResponse(json.dumps({"status":"success"}))
+
+        else:
+            files = Shapefile.objects.filter(user=user)
+
+        filelist = []
+        for shapefile in files:
+            filelist.append(shapefile.name)
+
+        return HttpResponse(json.dumps({"status":"success","files": filelist}))
+
+@csrf_exempt
 def shapefile_upload(request):
 
     # handle file upload
     if request.method == "POST":
 
-        if 'shapefile' not in request.FILES:
-            return(json.dumps({"status":"error", "message":"shapefile not specified"}))
+        if not request.FILES or 'shapefile' not in request.FILES:
+            return HttpResponse(json.dumps({"status":"error", "message":"shapefile not specified"}))
 
         if 'name' not in request.POST:
-            return(json.dumps({"status":"error", "message":"name not specified"}))
+            return HttpResponse(json.dumps({"status":"error", "message":"name not specified"}))
 
-        window_zip_file = Shapefile(zipfile = request.FILES['shapefile'], name=request.POST['name'])
+        if 'username' not in request.POST:
+            return HttpResponse(json.dumps({"status":"error", "message":"username not specified"}))
+
+        # check that the user exists
+        try:
+            user = User.objects.get(name=request.POST['username'])
+
+        except User.DoesNotExist:
+            return HttpResponse(json.dumps({"status":"error", "message":"user does not exist"}))
+
+        # check that this user doesnt already have a file of this name
+        files = Shapefile.objects.filter(user=user, name=request.POST["name"])
+
+        if not len(files) == 0:
+            return HttpResponse(json.dumps({"status":"error", "message":"user already has a file of this name"}))
+
+        window_zip_file = Shapefile(zipfile = request.FILES['shapefile'], name=request.POST['name'], user=user)
         window_zip_file.save()
 
         # now unzip the file
@@ -114,12 +157,16 @@ def shapefile_upload(request):
         realfilename = windowzipfile.namelist()[0][:-4]
 
         windowzipfile.extractall(os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name']))
-        # windows path
-        # windowzipfile.extractall(settings.MEDIA_ROOT+"shapefile\\"+request.POST['name'])
-        # original_zipfile.close()
+
+        # create a new name for the file
+        realfilename2 = str(uuid.uuid4()).replace("-", "")
+
+        # rename the files
+        for filename in os.listdir(os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name'])):
+            os.rename(os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name'],filename), os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name'], filename.replace(realfilename, realfilename2)))
 
         # save the real file name
-        window_zip_file.filename = realfilename
+        window_zip_file.filename = realfilename2
         window_zip_file.save()
 
 
@@ -158,16 +205,19 @@ def shapefile_upload(request):
         # convert to geojson
         source_filename = window_zip_file.get_full_path() + ".shp"
         output_filename = window_zip_file.get_full_path() + ".geojson"
-        print subprocess.call("ogr2ogr -f GeoJSON -s_srs " + epsgCode + " -t_srs EPSG:4326 " + output_filename + " " + source_filename)
+        print subprocess.call(["ogr2ogr", "-f", "GeoJSON", "-s_srs", epsgCode, "-t_srs", "EPSG:4326", output_filename, source_filename])
 
         # change projection
         output_filename = window_zip_file.get_full_path() + "projected.shp"
-        print "ogr2ogr -f \"ESRI Shapefile\" -s_srs " + epsgCode + " -t_srs EPSG:4326 " + output_filename + " " + source_filename
-        print subprocess.call("ogr2ogr -f \"ESRI Shapefile\" -s_srs " + epsgCode + " -t_srs EPSG:4326 " + output_filename + " " + source_filename)
+        print subprocess.call(["ogr2ogr", "-f", "ESRI Shapefile", "-s_srs", epsgCode, "-t_srs", "EPSG:4326", output_filename, source_filename])
 
         # output the geojson
         with open (window_zip_file.get_full_path() + ".geojson", "rb") as geojsonfile:
             outputgeojson = geojsonfile.read().replace('\n', '')
+            geojsonfile.close()
+
+        # delete the orignal zip file and the extracted contents
+        # print window_zip_file.zipfile.url
 
         # This bit of code adds the CSRF bits to your request.
         c = RequestContext(request,{"result":outputgeojson})
@@ -195,6 +245,41 @@ def shapefile_upload(request):
         {'shapefiles': shapefiles, 'form': form},
         context_instance=RequestContext(request)
     )
+
+@csrf_exempt
+def get_user_file(request):
+
+    if request.method == "POST":
+
+        data = json.loads(request.body)
+
+        if not 'username' in data:
+            return HttpResponse(json.dumps({"status":"error","message": "username not provided"}))
+
+        if not 'name' in data:
+            return HttpResponse(json.dumps({"status":"error","message": "file name not provided"}))
+
+        username = data['username']
+
+        name = data['name']
+
+        try:
+            user = User.objects.get(name=username)
+
+        except User.DoesNotExist:
+            return HttpResponse(json.dumps({"status":"error","message": "user does not exist"}))
+
+        try:
+            requested_file = Shapefile.objects.get(user=user, name=name)
+
+        except Shapefile.DoesNotExist:
+            return HttpResponse(json.dumps({"status":"error","message": "user does not have a shapefile of this name"}))
+
+        with open (requested_file.get_full_path() + ".geojson", "rb") as geojsonfile:
+            outputgeojson = geojsonfile.read().replace('\n', '')
+            geojsonfile.close()
+
+        return HttpResponse(outputgeojson, content_type="application/json")
 
 @csrf_exempt
 def kfunction_initialize(request):
@@ -258,7 +343,7 @@ def kfunction_initialize(request):
         except:
             message = "error running l-function in r"
             return HttpResponse(json.dumps({"status":"error", "message":message}), content_type="application/json")
-        finally: 
+        finally:
             conn.close()
         response = {}
         response['status'] = 'success'
