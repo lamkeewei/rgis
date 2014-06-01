@@ -140,8 +140,10 @@ def shapefile_upload(request):
         except User.DoesNotExist:
             return HttpResponse(json.dumps({"status":"error", "message":"user does not exist"}))
 
+        name = request.POST["name"]
+
         # check that this user doesnt already have a file of this name
-        files = Shapefile.objects.filter(user=user, name=request.POST["name"])
+        files = Shapefile.objects.filter(user=user, name=name)
 
         if not len(files) == 0:
             return HttpResponse(json.dumps({"status":"error", "message":"user already has a file of this name"}))
@@ -149,67 +151,113 @@ def shapefile_upload(request):
         window_zip_file = Shapefile(zipfile = request.FILES['shapefile'], name=request.POST['name'], user=user)
         window_zip_file.save()
 
-        # now unzip the file
-        original_zipfile = open(os.path.join(settings.MEDIA_ROOT, window_zip_file.zipfile.name), 'rb')
-        windowzipfile = zipfile.ZipFile(original_zipfile)
+        # check the extension
+        extension = window_zip_file.zipfile.name.split('.')[-1].lower()
 
-        # gets the name of the files in the zip
-        realfilename = windowzipfile.namelist()[0][:-4]
+        if extension == "zip":
 
-        windowzipfile.extractall(os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name']))
+            # now unzip the file
+            original_zipfile = open(os.path.join(settings.MEDIA_ROOT, window_zip_file.zipfile.name), 'rb')
+            windowzipfile = zipfile.ZipFile(original_zipfile)
 
-        # create a new name for the file
-        realfilename2 = str(uuid.uuid4()).replace("-", "")
+            # gets the name of the files in the zip
+            realfilename = windowzipfile.namelist()[0][:-4]
 
-        # rename the files
-        for filename in os.listdir(os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name'])):
-            os.rename(os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name'],filename), os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name'], filename.replace(realfilename, realfilename2)))
+            windowzipfile.extractall(os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name']))
 
-        # save the real file name
-        window_zip_file.filename = realfilename2
-        window_zip_file.save()
+            # create a new name for the file
+            realfilename2 = str(uuid.uuid4()).replace("-", "")
 
+            # rename the files
+            for filename in os.listdir(os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name'])):
+                os.rename(os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name'],filename), os.path.join(settings.MEDIA_ROOT,"shapefile",request.POST['name'], filename.replace(realfilename, realfilename2)))
 
-        # try to get the input epsg code
-        if 'projection' not in request.POST or request.POST['projection'] == "undefined" or (request.POST['projection'] == "" or request.POST['projection'] == None):
+            # save the real file name
+            window_zip_file.filename = realfilename2
+            window_zip_file.save()
 
-            filename = window_zip_file.get_full_path() + ".prj"
-            try:
-                prjFile = open(filename)
+            # try to get the input epsg code
+            if 'projection' not in request.POST or request.POST['projection'] == "undefined" or (request.POST['projection'] == "" or request.POST['projection'] == None):
 
-                prjContents = prjFile.readlines()
+                filename = window_zip_file.get_full_path() + ".prj"
+                try:
+                    prjFile = open(filename)
 
-                prjFile.close()
+                    prjContents = prjFile.readlines()
 
-                prjString = ""
+                    prjFile.close()
 
-                for line in prjContents:
-                    prjString = prjString + line
+                    prjString = ""
 
-                f = {'terms': prjString}
-                prjString = urllib.urlencode(f)
+                    for line in prjContents:
+                        prjString = prjString + line
 
-                # now put it as a query string to get the epsg code
-                epsg_r = requests.get("http://prj2epsg.org/search.json?mode=wkt&" + prjString)
-                epsg_r = epsg_r.json()['codes']
+                    f = {'terms': prjString}
+                    prjString = urllib.urlencode(f)
 
-                epsgCode = "EPSG:" + epsg_r[0]['code']
+                    # now put it as a query string to get the epsg code
+                    epsg_r = requests.get("http://prj2epsg.org/search.json?mode=wkt&" + prjString)
+                    epsg_r = epsg_r.json()['codes']
 
-            except IOError:
+                    epsgCode = "EPSG:" + epsg_r[0]['code']
+
+                except IOError:
+                    # default to wgs84
+                    epsgCode = "EPSG:4326"
+
+            else:
+                epsgCode = request.POST['projection'] # user specified a projection
+
+            # convert to (projected) geojson
+            source_filename = window_zip_file.get_full_path() + ".shp"
+            output_filename = window_zip_file.get_full_path() + ".geojson"
+            print subprocess.call(["ogr2ogr", "-f", "GeoJSON", "-s_srs", epsgCode, "-t_srs", "EPSG:4326", output_filename, source_filename])
+
+            # change projection of shapefile
+            output_filename = window_zip_file.get_full_path() + "projected.shp"
+            print subprocess.call(["ogr2ogr", "-f", "ESRI Shapefile", "-s_srs", epsgCode, "-t_srs", "EPSG:4326", output_filename, source_filename])
+
+        elif extension == "geojson":
+
+            # create the folder
+            if not os.path.exists(os.path.join(settings.MEDIA_ROOT, "shapefile", name)):
+                os.makedirs(os.path.join(settings.MEDIA_ROOT, "shapefile", name))
+
+            random_filename = str(uuid.uuid4()).replace("-", "")
+
+            # move uploaded file to the right folder and rename with random name
+            os.rename(os.path.join(settings.MEDIA_ROOT, window_zip_file.zipfile.name), os.path.join(settings.MEDIA_ROOT, "shapefile", name, random_filename + ".geojson"))
+
+            # save these changes
+            window_zip_file.filename = random_filename
+            window_zip_file.save()
+
+            # try to get the input epsg code
+            if 'projection' in request.POST and request.POST['projection'] != "undefined" and request.POST['projection'] != "" and request.POST['projection'] != None:
+                epsgCode = request.POST['projection']
+
+            else:
                 # default to wgs84
                 epsgCode = "EPSG:4326"
 
-        else:
-            epsgCode = request.POST['projection'] # user specified a projection
+            # convert to projected geojson if necessary
+            if epsgCode != "EPSG:4326":
+                source_filename = window_zip_file.get_full_path() + ".geojson"
+                output_filename = window_zip_file.get_full_path() + "projected.geojson"
 
-        # convert to geojson
-        source_filename = window_zip_file.get_full_path() + ".shp"
-        output_filename = window_zip_file.get_full_path() + ".geojson"
-        print subprocess.call(["ogr2ogr", "-f", "GeoJSON", "-s_srs", epsgCode, "-t_srs", "EPSG:4326", output_filename, source_filename])
+                print subprocess.call(["ogr2ogr", "-f", "GeoJSON", "-s_srs", epsgCode, "-t_srs", "EPSG:4326", output_filename, source_filename])
 
-        # change projection
-        output_filename = window_zip_file.get_full_path() + "projected.shp"
-        print subprocess.call(["ogr2ogr", "-f", "ESRI Shapefile", "-s_srs", epsgCode, "-t_srs", "EPSG:4326", output_filename, source_filename])
+                # rename the original file
+                os.rename(source_filename, window_zip_file.get_full_path() + "original.geojson")
+
+                # rename the projected file
+                os.rename(output_filename, window_zip_file.get_full_path() + ".geojson")
+
+            # convert to (projected) shapefile
+            source_filename = window_zip_file.get_full_path() + ".geojson"
+            output_filename = window_zip_file.get_full_path() + "projected.shp"
+
+            print subprocess.call(["ogr2ogr", "-f", "ESRI Shapefile", "-s_srs", epsgCode, "-t_srs", "EPSG:4326", output_filename, source_filename])
 
         # output the geojson
         with open (window_zip_file.get_full_path() + ".geojson", "rb") as geojsonfile:
